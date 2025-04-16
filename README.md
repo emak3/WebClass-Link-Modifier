@@ -19,4 +19,4 @@ WebClassサイトのリンクが新しいタブやウィンドウで開くのを
 5. 先ほどダウンロードした拡張機能フォルダを**解凍**し（WebClass Link Modifier）を選択します
 6. 拡張機能が正常にインストールされると、拡張機能リストに表示されます
 
-[ダウンロード]()
+[ダウンロード](https://github.com/emak3/WebClass-Link-Modifier/releases)
