@@ -21,7 +21,7 @@ WebClassサイトのリンクが新しいタブやウィンドウで開くのを
 
 ## CRXファイルの場合
 `WebClass Link Modifier.crx`
-※審査してないのでできない
+- ※審査してないのでできない
 「edge://extensions/」または、「chrome://extensions/」に飛び、ファイルをドラックアンドドロップで拡張機能を追加できます。
   **v1.2以上**
 
