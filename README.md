@@ -25,5 +25,5 @@ WebClassサイトのリンクが新しいタブやウィンドウで開くのを
 <br>
 「edge://extensions/」または、「chrome://extensions/」に飛び、ファイルをドラックアンドドロップで拡張機能を追加できます。
   **v1.2以上**
-
+---
 [ダウンロード](https://github.com/emak3/WebClass-Link-Modifier/releases/tag/v1.1)
