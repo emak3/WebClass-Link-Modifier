@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebClass Link Modifier - 設定</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="container">
+        <h1>WebClass Link Modifier 設定</h1>
+        <p class="subtitle">WebClassサイトのドメインを設定してください</p>
+
+        <div class="info">
+            <div class="info-title">使い方</div>
+            <div class="info-text">
+                1. 使用するWebClassのドメインを追加してください<br>
+                2. 「設定を保存」ボタンをクリックして保存します<br>
+                3. 設定を変更した後は、対象のページを再読み込みしてください
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">対象ドメイン</div>
+            <div class="info-text" style="margin-bottom: 10px;">
+                例: lms.example.ac.jp または example.ac.jp
+            </div>
+            <div id="domainList" class="domain-list"></div>
+            <button id="addDomainBtn" class="add-domain-btn">+ ドメインを追加</button>
+        </div>
+
+        <button id="saveBtn" class="save-btn">設定を保存</button>
+        <div id="statusMessage" class="status-message"></div>
+    </div>
+
+    <footer>
+        お問い合わせ: <a href="mailto:wc-contact@ouma3.org">wc-contact@ouma3.org</a>
+    </footer>
+
+    <script src="options.js"></script>
+</body>
+</html>

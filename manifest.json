@@ -1,20 +1,16 @@
 {
     "manifest_version": 3,
     "name": "WebClass Link Modifier",
-    "version": "1.1",
-    "description": "WebClassサイトのリンクが新しいタブやウィンドウで開くのを防ぎ、現在のタブで開くようにします",
-    "permissions": ["scripting", "webNavigation"],
+    "version": "2.0",
+    "description": "WebClassサイトのリンクを設定したドメインで管理し、新しいタブで適切に開くようにします",
+    "permissions": ["scripting", "webNavigation", "storage"],
     "host_permissions": [
-      "https://lms.salesio-sp.ac.jp/*",
-      "https://*.salesio-sp.ac.jp/*",
-      "https://*.microsoft.com/*"
+      "https://*/*"
     ],
     "content_scripts": [
       {
         "matches": [
-          "https://lms.salesio-sp.ac.jp/*", 
-          "https://*.salesio-sp.ac.jp/*",
-          "https://*.microsoft.com/*"
+          "https://*/*"
         ],
         "js": ["content.js"],
         "run_at": "document_start",
@@ -23,6 +19,10 @@
     ],
     "background": {
       "service_worker": "background.js"
+    },
+    "options_ui": {
+      "page": "options.html",
+      "open_in_tab": true
     },
     "icons": {
       "48": "icon48.png",

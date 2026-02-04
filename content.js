@@ -1,81 +1,122 @@
+// デフォルトのドメイン
+const DEFAULT_DOMAINS = ['lms.salesio-sp.ac.jp'];
+
+// 現在のページが対象ドメインかチェック
+let isTargetDomain = false;
+
+chrome.storage.sync.get(['domains'], function(result) {
+  const domains = result.domains || DEFAULT_DOMAINS;
+  const currentHost = window.location.hostname;
+  
+  isTargetDomain = domains.some(domain => currentHost.includes(domain));
+  
+  if (isTargetDomain) {
+    // 対象ドメインの場合のみ実行
+    initExtension();
+  }
+});
+
+function initExtension() {
 function modifyLinks() {
     try {
-      console.log('WebClass Link Modifier: modifying links');
-
       const links = document.querySelectorAll('a');
-      
 
       for (let i = 0; i < links.length; i++) {
         const link = links[i];
         
+        // すでに処理済みのリンクはスキップ
+        if (link.hasAttribute('data-modified')) {
+          continue;
+        }
+        link.setAttribute('data-modified', 'true');
 
         if (link.classList.contains('showLoginButton')) {
-          console.log('WebClass Link Modifier: found login button', link);
-
           const originalOnclick = link.getAttribute('onclick');
           link.removeAttribute('onclick');
+          link.removeAttribute('href');
           
 
           link.addEventListener('click', function(e) {
-            console.log('WebClass Link Modifier: login button clicked');
             e.preventDefault();
             e.stopPropagation();
+            e.stopImmediatePropagation();
 
             let url = "/webclass/login.php?auth_mode=SAML" + window.location.search;
             if (originalOnclick && originalOnclick.includes('ENGLISH')) {
               url += '&language=ENGLISH';
             }
 
-            console.log('WebClass Link Modifier: redirecting to', url);
             window.location.href = url;
             return false;
           }, true);
           continue;
         }
 
-        if (link.getAttribute('target') === '_blank' || link.getAttribute('target') === '_new') {
-          link.removeAttribute('target');
-        }
+        // PDFやその他のファイルへのリンクかチェック
+        const href = link.getAttribute('href') || '';
+        const isPdfOrFile = /\.(pdf|doc|docx|xls|xlsx|ppt|pptx|zip|rar)$/i.test(href);
         
-
-        if (link.getAttribute('onclick') && 
-            (link.getAttribute('onclick').includes('window.open') || 
-             link.getAttribute('onclick').includes('open(') ||
-             link.getAttribute('onclick').includes('_blank'))) {
+        // onclick属性を持つリンクの処理
+        const onclickAttr = link.getAttribute('onclick');
+        if (onclickAttr && 
+            (onclickAttr.includes('window.open') || 
+             onclickAttr.includes('open(') ||
+             onclickAttr.includes('MessageWindow') ||
+             onclickAttr.includes('_blank'))) {
           
-
-          const originalOnclick = link.getAttribute('onclick');
-          const originalHref = link.getAttribute('href');
+          const originalOnclick = onclickAttr;
+          const originalHref = href;
           
-
+          // onclick属性とhref属性を削除
           link.removeAttribute('onclick');
+          link.removeAttribute('href');
+          link.style.cursor = 'pointer';
           
 
           link.addEventListener('click', function(e) {
-
             e.preventDefault();
             e.stopPropagation();
+            e.stopImmediatePropagation();
             
 
             let url = originalHref;
 
             if (originalOnclick) {
-              const urlMatch = originalOnclick.match(/(?:window\.open|open)\(['"]([^'"]+)['"]/);
-              if (urlMatch && urlMatch[1]) {
-                url = urlMatch[1];
+              // openMessageWindow、window.open、openなどから関数名とURLを抽出
+              const functionMatch = originalOnclick.match(/return\s+(\w+)\(['"]([^'"]+)['"]\)/);
+              if (functionMatch) {
+                url = functionMatch[2];
+              } else {
+                const urlMatch = originalOnclick.match(/(?:window\.open|open)\(['"]([^'"]+)['"]/);
+                if (urlMatch && urlMatch[1]) {
+                  url = urlMatch[1];
+                }
               }
             }
             
 
-            if (url) {
-              window.location.href = url;
+            if (url && url !== '#') {
+              window.open(url, '_blank');
             }
             return false;
           }, true);
+          continue;
+        }
+        
+        // target属性の処理（onclick属性がない場合）
+        const targetAttr = link.getAttribute('target');
+        if (targetAttr && targetAttr !== '_self') {
+          // PDFやファイルの場合、または特定のターゲット名の場合は _blank に統一
+          if (isPdfOrFile || (targetAttr !== '_blank' && targetAttr !== '_new')) {
+            link.setAttribute('target', '_blank');
+          } else if (!isPdfOrFile) {
+            // それ以外は削除
+            link.removeAttribute('target');
+          }
         }
       }
     } catch (error) {
-      console.error('Error in modifyLinks:', error);
+      console.error('リンク修正エラー:', error);
     }
   }
   
@@ -92,102 +133,74 @@ function modifyLinks() {
         }
       }
     } catch (error) {
-      console.error('Error in modifyForms:', error);
+      console.error('フォーム修正エラー:', error);
     }
   }
   
 
   function overrideGlobalFunctions() {
     try {
-      console.log('WebClass Link Modifier: overriding global functions');
-      
-
       const originalWindowOpen = window.open;
       
 
       window.open = function(url, name, specs) {
         try {
-          console.log('WebClass Link Modifier: intercepted window.open call for URL:', url);
-          
-
           if (!url || url === 'null' || url === 'about:blank') {
-            console.log('WebClass Link Modifier: null or blank URL, not redirecting');
             return null;
           }
           
+          // PDFやファイルの場合は新しいタブで開く
+          const isPdfOrFile = /\.(pdf|doc|docx|xls|xlsx|ppt|pptx|zip|rar)$/i.test(url);
+          if (isPdfOrFile) {
+            return originalWindowOpen.call(this, url, '_blank');
+          }
 
-          console.log('WebClass Link Modifier: redirecting current window to:', url);
-          window.location.href = url;
-          
-
-          return null;
+          // 新しいタブで開く
+          return originalWindowOpen.call(this, url, '_blank');
         } catch (error) {
-          console.error('Error in window.open override:', error);
-
+          console.error('window.openエラー:', error);
           return originalWindowOpen.apply(this, arguments);
         }
       };
       
+      // openMessageWindow関数を上書き
+      if (typeof window.openMessageWindow === 'function') {
+        const originalOpenMessageWindow = window.openMessageWindow;
+        
+        window.openMessageWindow = function(url) {
+          return window.open(url, '_blank');
+        };
+      }
 
       if (typeof window.openWebClassWindow === 'function') {
-        console.log('WebClass Link Modifier: detected openWebClassWindow function, overriding it');
-        
-
         const originalOpenWebClassWindow = window.openWebClassWindow;
         
-
         window.openWebClassWindow = function(url) {
-          console.log('WebClass Link Modifier: intercepted openWebClassWindow call with URL:', url);
-          
-
           window.location.href = url;
-          
-
           return window;
         };
-      } else {
-        console.log('WebClass Link Modifier: openWebClassWindow function not found');
       }
       
 
       if (typeof window.callWebClass === 'function') {
-        console.log('WebClass Link Modifier: detected callWebClass function, overriding it');
-        
-
         const originalCallWebClass = window.callWebClass;
         
-
         window.callWebClass = function(lang) {
-          console.log('WebClass Link Modifier: intercepted callWebClass call with language:', lang);
-          
-
           var url = "/webclass/login.php?auth_mode=SAML" + window.location.search;
           if(lang == 'ENGLISH') {
             url += '&language=ENGLISH';
           }
           
-
-          console.log('WebClass Link Modifier: redirecting to:', url);
           window.location.href = url;
-          
-
           return false;
         };
-      } else {
-        console.log('WebClass Link Modifier: callWebClass function not found');
       }
       
 
       if (typeof window.callSmartphoneWebClass === 'function') {
-        console.log('WebClass Link Modifier: detected callSmartphoneWebClass function, overriding it');
-        
- 
         const originalCallSmartphoneWebClass = window.callSmartphoneWebClass;
         
         window.callSmartphoneWebClass = function(lang) {
-          console.log('WebClass Link Modifier: intercepted callSmartphoneWebClass call with language:', lang);
-          
-
           var url = "/webclass/login.php" + window.location.search;
           if(window.location.search === '') {
             url += '?';
@@ -199,42 +212,30 @@ function modifyLinks() {
             url += '&language=ENGLISH';
           }
           
-
           window.location.href = url;
-          
-
           return false;
         };
-      } else {
-        console.log('WebClass Link Modifier: callSmartphoneWebClass function not found');
       }
     } catch (error) {
-      console.error('Error in overrideGlobalFunctions:', error);
+      console.error('関数上書きエラー:', error);
     }
   }
   
 
   function init() {
     try {
-      console.log('WebClass Link Modifier: initializing extension');
-      
-
       overrideGlobalFunctions();
       
 
       if (document.body) {
-        console.log('WebClass Link Modifier: document.body is available, modifying page');
         modifyLinks();
         modifyForms();
         setupObserver();
       } else {
-        console.log('WebClass Link Modifier: document.body is not yet available, waiting');
-
         setTimeout(init, 10);
       }
     } catch (error) {
-      console.error('Error in init function:', error);
-
+      console.error('初期化エラー:', error);
       setTimeout(init, 100);
     }
   }
@@ -242,8 +243,6 @@ function modifyLinks() {
 
   function setupObserver() {
     try {
-      console.log('WebClass Link Modifier: setting up mutation observer');
-      
       const observer = new MutationObserver(function(mutations) {
         try {
           let shouldUpdate = false;
@@ -255,12 +254,11 @@ function modifyLinks() {
           }
           
           if (shouldUpdate) {
-            console.log('WebClass Link Modifier: DOM changes detected, updating links');
             modifyLinks();
             modifyForms();
           }
         } catch (error) {
-          console.error('Error in observer callback:', error);
+          console.error('監視エラー:', error);
         }
       });
   
@@ -270,22 +268,16 @@ function modifyLinks() {
           childList: true,
           subtree: true
         });
-        console.log('WebClass Link Modifier: observer attached to document.body');
-      } else {
-        console.log('WebClass Link Modifier: document.body not available for observer');
       }
     } catch (error) {
-      console.error('Error setting up observer:', error);
+      console.error('監視設定エラー:', error);
     }
   }
   
-
-  console.log('WebClass Link Modifier: extension loaded, starting initialization');
   init();
   
 
   document.onreadystatechange = function() {
-    console.log('WebClass Link Modifier: readyState changed to', document.readyState);
     if (document.readyState === 'interactive' || document.readyState === 'complete') {
       modifyLinks();
       modifyForms();
@@ -296,23 +288,21 @@ function modifyLinks() {
 
   document.addEventListener('DOMContentLoaded', function() {
     try {
-      console.log('WebClass Link Modifier: DOMContentLoaded event fired');
       modifyLinks();
       modifyForms();
       setupObserver();
     } catch (error) {
-      console.error('Error in DOMContentLoaded handler:', error);
+      console.error('DOMContentLoadedエラー:', error);
     }
   });
   
 
   window.addEventListener('load', function() {
     try {
-      console.log('WebClass Link Modifier: Window load event fired');
       modifyLinks();
       modifyForms();
     } catch (error) {
-      console.error('Error in window.onload handler:', error);
+      console.error('window.loadエラー:', error);
     }
   });
   
@@ -321,15 +311,19 @@ function modifyLinks() {
     const originalWindowOpen = window.open;
     window.open = function(url, name, specs) {
       try {
-
-        window.location.href = url;
+        // PDFやファイルの場合は新しいタブで開く
+        const isPdfOrFile = /\.(pdf|doc|docx|xls|xlsx|ppt|pptx|zip|rar)$/i.test(url);
+        if (isPdfOrFile) {
+          return originalWindowOpen.call(this, url, '_blank');
+        }
+        // 新しいタブで開く
+        return originalWindowOpen.call(this, url, '_blank');
       } catch (error) {
-        console.error('Error in window.open override:', error);
-
+        console.error('window.openエラー:', error);
         return originalWindowOpen.apply(this, arguments);
       }
-      return null; 
     };
   } catch (error) {
-    console.error('Error overriding window.open:', error);
+    console.error('window.open上書きエラー:', error);
   }
+}

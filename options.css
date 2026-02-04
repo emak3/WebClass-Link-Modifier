@@ -1,0 +1,184 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #36393f;
+    color: #dcddde;
+}
+
+.container {
+    background-color: #2f3136;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+h1 {
+    color: #ffffff;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #b9bbbe;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #b9bbbe;
+    margin-bottom: 15px;
+}
+
+.domain-list {
+    margin-bottom: 15px;
+}
+
+.domain-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: #40444b;
+    border-radius: 4px;
+    border: 1px solid #202225;
+}
+
+.domain-item input[type="text"] {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #202225;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-right: 10px;
+    background-color: #202225;
+    color: #dcddde;
+}
+
+.domain-item input[type="text"]:focus {
+    outline: none;
+    border-color: #5865f2;
+}
+
+.domain-item input[type="text"]::placeholder {
+    color: #72767d;
+}
+
+.domain-item button {
+    padding: 8px 16px;
+    background-color: #ed4245;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.domain-item button:hover {
+    background-color: #c03537;
+}
+
+.add-domain-btn {
+    padding: 10px 20px;
+    background-color: #3ba55d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+}
+
+.add-domain-btn:hover {
+    background-color: #2d7d46;
+}
+
+.save-btn {
+    padding: 12px 30px;
+    background-color: #5865f2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.save-btn:hover {
+    background-color: #4752c4;
+}
+
+.info {
+    background-color: #40444b;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.info-title {
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.info-text {
+    font-size: 14px;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+.status-message {
+    padding: 0;
+    border-radius: 0;
+    margin-top: 15px;
+    text-align: center;
+    font-weight: normal;
+    font-size: 14px;
+    display: none;
+    background-color: transparent;
+}
+
+.status-message.success {
+    color: #3ba55d;
+}
+
+.status-message.error {
+    color: #ed4245;
+}
+
+.example {
+    background-color: #1e1f22;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 13px;
+    margin-top: 5px;
+    color: #00b0f4;
+    border: 1px solid #00b0f4;
+    opacity: 0.7;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    color: #b9bbbe;
+    font-size: 14px;
+}
+
+footer a {
+    color: #00b0f4;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
