@@ -7,14 +7,33 @@ let linkBehavior = 'newTab'; // その他のリンク
 let mailBehavior = 'newTab'; // メールリンク
 let fileBehavior = 'newTab'; // PDFなどのファイル
 let webclassBehavior = 'sameTab'; // WebClassログイン画面
+let attachmentBehavior = 'newWindow'; // 添付資料リンク
 
-chrome.storage.sync.get(['domains', 'linkBehavior', 'mailBehavior', 'fileBehavior', 'webclassBehavior'], function(result) {
+// ウィンドウサイズ設定
+let mailWindowSize = { width: 800, height: 600 };
+let fileWindowSize = { width: 1200, height: 900 };
+let attachmentWindowSize = { width: 500, height: 500 };
+let linkWindowSize = { width: 800, height: 600 };
+let webclassWindowSize = { width: 1600, height: 898 };
+
+chrome.storage.sync.get([
+  'domains', 'linkBehavior', 'mailBehavior', 'fileBehavior', 'webclassBehavior', 'attachmentBehavior',
+  'mailWindowSize', 'fileWindowSize', 'attachmentWindowSize', 'linkWindowSize', 'webclassWindowSize'
+], function(result) {
   const domains = result.domains || DEFAULT_DOMAINS;
   const currentHost = window.location.hostname;
   linkBehavior = result.linkBehavior || 'newTab';
   mailBehavior = result.mailBehavior || 'newTab';
   fileBehavior = result.fileBehavior || 'newTab';
   webclassBehavior = result.webclassBehavior || 'sameTab';
+  attachmentBehavior = result.attachmentBehavior || 'newWindow';
+  
+  // ウィンドウサイズ設定を読み込む
+  mailWindowSize = result.mailWindowSize || { width: 800, height: 600 };
+  fileWindowSize = result.fileWindowSize || { width: 1200, height: 900 };
+  attachmentWindowSize = result.attachmentWindowSize || { width: 500, height: 500 };
+  linkWindowSize = result.linkWindowSize || { width: 800, height: 600 };
+  webclassWindowSize = result.webclassWindowSize || { width: 1600, height: 898 };
   
   isTargetDomain = domains.some(domain => currentHost.includes(domain));
   
@@ -48,18 +67,43 @@ function initExtension() {
           return 'mail';
         }
       }
+      
+      // 添付資料リンクの判定
+      // onclick属性にfiledownloadが含まれる、またはimg.attach_fileを含む
+      const onclickAttr = element.getAttribute('onclick') || '';
+      if (onclickAttr.includes('filedownload')) {
+        return 'attachment';
+      }
+      
+      const hasAttachIcon = element.querySelector('img.attach_file') || 
+                           element.querySelector('img[alt*="添付"]') ||
+                           element.querySelector('img[src*="attach"]');
+      if (hasAttachIcon) {
+        return 'attachment';
+      }
+      
+      // テキストが「添付資料」の場合
+      const textContent = element.textContent || '';
+      if (textContent.trim() === '添付資料' || textContent.includes('添付')) {
+        return 'attachment';
+      }
     }
     
     // URLベースの判定
     if (!url) return 'other';
+    
+    // 添付ファイルのダウンロードURL
+    if (url.includes('file_down.php') || url.includes('download') || url.includes('attach')) {
+      return 'attachment';
+    }
     
     // WebClassログイン画面
     if (url.includes('/webclass/login.php')) {
       return 'webclass';
     }
     
-    // メールリンク（MessageWindowを含む）
-    if (url.includes('MessageWindow') || url.includes('message') || url.includes('mail')) {
+    // メールリンク判定
+    if (url.includes('msg_editor.php')) {
       return 'mail';
     }
     
@@ -79,18 +123,36 @@ function initExtension() {
 
     // リンクタイプに応じた設定を使用
     let behavior;
+    let windowSize;
+    
     switch (linkType) {
       case 'mail':
         behavior = mailBehavior;
+        windowSize = mailWindowSize;
         break;
       case 'file':
         behavior = fileBehavior;
+        windowSize = fileWindowSize;
+        // PDFファイルは同じタブで開けないように強制
+        if (behavior === 'sameTab') {
+          behavior = 'newTab';
+        }
+        break;
+      case 'attachment':
+        behavior = attachmentBehavior;
+        windowSize = attachmentWindowSize;
+        // 添付資料も同じタブで開けないように強制
+        if (behavior === 'sameTab') {
+          behavior = 'newWindow';
+        }
         break;
       case 'webclass':
         behavior = webclassBehavior;
+        windowSize = webclassWindowSize;
         break;
       default:
         behavior = linkBehavior;
+        windowSize = linkWindowSize;
     }
 
     switch (behavior) {
@@ -101,7 +163,8 @@ function initExtension() {
       
       case 'newWindow':
         // 新しいウィンドウ（サブウィンドウ）で開く
-        window.open(url, '_blank', 'width=800,height=600,resizable=yes,scrollbars=yes');
+        const specs = `width=${windowSize.width},height=${windowSize.height},top=0,left=0,resizable=yes,scrollbars=yes`;
+        window.open(url, '_blank', specs);
         break;
       
       case 'sameTab':
@@ -160,6 +223,53 @@ function initExtension() {
         const href = link.getAttribute('href') || '';
         const isPdfOrFile = /\.(pdf|doc|docx|xls|xlsx|ppt|pptx|zip|rar)$/i.test(href);
         
+        // リンクタイプを事前に判定
+        const linkType = getLinkType(href, link);
+        
+        // 添付資料リンクの特別処理
+        if (linkType === 'attachment') {
+          const originalOnclick = link.getAttribute('onclick');
+          const originalHref = href;
+          
+          // onclick属性とhref属性を削除
+          link.removeAttribute('onclick');
+          link.removeAttribute('href');
+          link.style.cursor = 'pointer';
+          // リンク色を保持
+          link.style.color = '#0066cc';
+          link.style.textDecoration = 'underline';
+          
+          // ホバー時の色変更
+          link.addEventListener('mouseenter', function() {
+            this.style.color = '#003d7a';
+          });
+          link.addEventListener('mouseleave', function() {
+            this.style.color = '#0066cc';
+          });
+          
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            
+            let url = originalHref;
+            
+            // onclickからURLを抽出
+            if (originalOnclick) {
+              const urlMatch = originalOnclick.match(/filedownload\(['"]([^'"]+)['"]\)/);
+              if (urlMatch && urlMatch[1]) {
+                url = urlMatch[1];
+              }
+            }
+            
+            if (url && url !== '#') {
+              openLink(url, 'attachment');
+            }
+            return false;
+          }, true);
+          continue;
+        }
+        
         // onclick属性を持つリンクの処理
         const onclickAttr = link.getAttribute('onclick');
         if (onclickAttr && 
@@ -175,6 +285,19 @@ function initExtension() {
           link.removeAttribute('onclick');
           link.removeAttribute('href');
           link.style.cursor = 'pointer';
+          // リンク色を保持
+          if (!link.style.color || link.style.color === '') {
+            link.style.color = '#0066cc';
+            link.style.textDecoration = 'underline';
+            
+            // ホバー時の色変更
+            link.addEventListener('mouseenter', function() {
+              this.style.color = '#003d7a';
+            });
+            link.addEventListener('mouseleave', function() {
+              this.style.color = '#0066cc';
+            });
+          }
           
 
           link.addEventListener('click', function(e) {
@@ -216,6 +339,7 @@ function initExtension() {
           const linkType = getLinkType(href, link);
           const behavior = linkType === 'mail' ? mailBehavior : 
                           linkType === 'file' ? fileBehavior :
+                          linkType === 'attachment' ? attachmentBehavior :
                           linkType === 'webclass' ? webclassBehavior :
                           linkBehavior;
           
@@ -230,6 +354,19 @@ function initExtension() {
               link.removeAttribute('href');
               link.removeAttribute('target');
               link.style.cursor = 'pointer';
+              // リンク色を保持
+              if (!link.style.color || link.style.color === '') {
+                link.style.color = '#0066cc';
+                link.style.textDecoration = 'underline';
+                
+                // ホバー時の色変更
+                link.addEventListener('mouseenter', function() {
+                  this.style.color = '#003d7a';
+                });
+                link.addEventListener('mouseleave', function() {
+                  this.style.color = '#0066cc';
+                });
+              }
               
               link.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -280,6 +417,7 @@ function initExtension() {
           const linkType = getLinkType(action, form);
           const behavior = linkType === 'mail' ? mailBehavior : 
                           linkType === 'file' ? fileBehavior :
+                          linkType === 'attachment' ? attachmentBehavior :
                           linkType === 'webclass' ? webclassBehavior :
                           linkBehavior;
           
@@ -313,10 +451,27 @@ function initExtension() {
             linkType = 'mail';
           }
           
-          const behavior = linkType === 'mail' ? mailBehavior : 
+          let behavior = linkType === 'mail' ? mailBehavior : 
                           linkType === 'file' ? fileBehavior :
+                          linkType === 'attachment' ? attachmentBehavior :
                           linkType === 'webclass' ? webclassBehavior :
                           linkBehavior;
+          
+          let windowSize = linkType === 'mail' ? mailWindowSize :
+                          linkType === 'file' ? fileWindowSize :
+                          linkType === 'attachment' ? attachmentWindowSize :
+                          linkType === 'webclass' ? webclassWindowSize :
+                          linkWindowSize;
+          
+          // PDFファイルは同じタブで開けないように強制
+          if (linkType === 'file' && behavior === 'sameTab') {
+            behavior = 'newTab';
+          }
+          
+          // 添付資料も同じタブで開けないように強制
+          if (linkType === 'attachment' && behavior === 'sameTab') {
+            behavior = 'newWindow';
+          }
 
           // 設定に応じて開く
           switch (behavior) {
@@ -324,7 +479,8 @@ function initExtension() {
               return originalWindowOpen.call(this, url, '_blank');
             
             case 'newWindow':
-              return originalWindowOpen.call(this, url, '_blank', 'width=800,height=600,resizable=yes,scrollbars=yes');
+              const windowSpecs = `width=${windowSize.width},height=${windowSize.height},top=0,left=0,resizable=yes,scrollbars=yes`;
+              return originalWindowOpen.call(this, url, '_blank', windowSpecs);
             
             case 'sameTab':
               window.location.href = url;
@@ -347,6 +503,22 @@ function initExtension() {
           const linkType = getLinkType(url);
           openLink(url, linkType);
           return window;
+        };
+      }
+      
+      // filedownload関数を上書き
+      if (typeof window.filedownload === 'function') {
+        const originalFiledownload = window.filedownload;
+        
+        window.filedownload = function(url) {
+          openLink(url, 'attachment');
+          return false;
+        };
+      } else {
+        // filedownload関数が存在しない場合は新規作成
+        window.filedownload = function(url) {
+          openLink(url, 'attachment');
+          return false;
         };
       }
 

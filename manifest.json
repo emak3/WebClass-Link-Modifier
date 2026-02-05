@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "WebClass Link Modifier",
-  "version": "3.1",
+  "version": "3.2.0",
   "description": "WebClassサイトのリンクを設定したドメインで管理し、リンクの開き方を個別にカスタマイズできます",
   "permissions": [
     "scripting",

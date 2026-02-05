@@ -134,7 +134,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 // 拡張機能インストール時にデフォルト値を設定
 chrome.runtime.onInstalled.addListener(function() {
-  chrome.storage.sync.get(['domains', 'linkBehavior', 'mailBehavior', 'fileBehavior', 'webclassBehavior'], function(result) {
+  chrome.storage.sync.get([
+    'domains', 'linkBehavior', 'mailBehavior', 'fileBehavior', 'webclassBehavior', 'attachmentBehavior',
+    'mailWindowSize', 'fileWindowSize', 'attachmentWindowSize', 'linkWindowSize', 'webclassWindowSize'
+  ], function(result) {
     const updates = {};
     if (!result.domains) {
       updates.domains = DEFAULT_DOMAINS;
@@ -150,6 +153,24 @@ chrome.runtime.onInstalled.addListener(function() {
     }
     if (!result.webclassBehavior) {
       updates.webclassBehavior = 'sameTab'; // WebClassログイン画面
+    }
+    if (!result.attachmentBehavior) {
+      updates.attachmentBehavior = 'newWindow'; // 添付資料リンク
+    }
+    if (!result.mailWindowSize) {
+      updates.mailWindowSize = { width: 800, height: 800, ratio: '1:1' };
+    }
+    if (!result.fileWindowSize) {
+      updates.fileWindowSize = { width: 1200, height: 900, ratio: '4:3' };
+    }
+    if (!result.attachmentWindowSize) {
+      updates.attachmentWindowSize = { width: 500, height: 500, ratio: '1:1' };
+    }
+    if (!result.linkWindowSize) {
+      updates.linkWindowSize = { width: 800, height: 600, ratio: '4:3' };
+    }
+    if (!result.webclassWindowSize) {
+      updates.webclassWindowSize = { width: 1600, height: 898, ratio: '16:9' };
     }
     if (Object.keys(updates).length > 0) {
       chrome.storage.sync.set(updates);

@@ -51,9 +51,36 @@
                         </div>
                     </label>
                 </div>
+                <div class="window-size-settings" id="mailWindowSize" style="display: none;">
+                    <div class="size-presets">
+                        <button class="preset-btn" data-ratio="16:9">16:9</button>
+                        <button class="preset-btn" data-ratio="4:3">4:3</button>
+                        <button class="preset-btn" data-ratio="1:1">1:1</button>
+                        <button class="preset-btn" data-ratio="custom">カスタム</button>
+                        <button class="reset-btn">初期値にリセット</button>
+                    </div>
+                    <div class="size-inputs">
+                        <div class="input-group">
+                            <label>幅 (px)</label>
+                            <input type="number" class="size-input" id="mailWidth" min="100" max="10000" step="50"
+                                value="800">
+                        </div>
+                        <div class="input-group">
+                            <label>高さ (px)</label>
+                            <input type="number" class="size-input" id="mailHeight" min="100" max="10000" step="50"
+                                value="600">
+                        </div>
+                        <div class="input-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="mailMaintainRatio" checked>
+                                比率を維持
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-<!-- PDFなどのファイル -->
+            <!-- PDFなどのファイル -->
             <div class="setting-group">
                 <div class="setting-label">PDFなどのファイル</div>
                 <div class="link-behavior-options">
@@ -75,9 +102,91 @@
                         <input type="radio" name="fileBehavior" value="sameTab" disabled>
                         <div class="option-content">
                             <div class="option-title">同じタブ</div>
-                        <!--    <div class="option-description">(PDFは利用不可)</div>    -->
+                            <div class="option-description">(PDFは利用不可)</div>
                         </div>
                     </label>
+                </div>
+                <div class="window-size-settings" id="fileWindowSize" style="display: none;">
+                    <div class="size-presets">
+                        <button class="preset-btn" data-ratio="16:9">16:9</button>
+                        <button class="preset-btn" data-ratio="4:3">4:3</button>
+                        <button class="preset-btn" data-ratio="1:1">1:1</button>
+                        <button class="preset-btn" data-ratio="custom">カスタム</button>
+                        <button class="reset-btn">初期値にリセット</button>
+                    </div>
+                    <div class="size-inputs">
+                        <div class="input-group">
+                            <label>幅 (px)</label>
+                            <input type="number" class="size-input" id="fileWidth" min="100" max="10000" step="50"
+                                value="1200">
+                        </div>
+                        <div class="input-group">
+                            <label>高さ (px)</label>
+                            <input type="number" class="size-input" id="fileHeight" min="100" max="10000" step="50"
+                                value="900">
+                        </div>
+                        <div class="input-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="fileMaintainRatio" checked>
+                                比率を維持
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 添付資料リンク -->
+            <div class="setting-group">
+                <div class="setting-label">添付資料リンク</div>
+                <div class="link-behavior-options">
+                    <label class="radio-option compact">
+                        <input type="radio" name="attachmentBehavior" value="newTab">
+                        <div class="option-content">
+                            <div class="option-title">別のタブ</div>
+                        </div>
+                    </label>
+
+                    <label class="radio-option compact">
+                        <input type="radio" name="attachmentBehavior" value="newWindow" checked>
+                        <div class="option-content">
+                            <div class="option-title">サブウィンドウ</div>
+                        </div>
+                    </label>
+
+                    <label class="radio-option compact disabled">
+                        <input type="radio" name="attachmentBehavior" value="sameTab" disabled>
+                        <div class="option-content">
+                            <div class="option-title">同じタブ</div>
+                            <div class="option-description">(添付資料は利用不可)</div>
+                        </div>
+                    </label>
+                </div>
+                <div class="window-size-settings" id="attachmentWindowSize" style="display: none;">
+                    <div class="size-presets">
+                        <button class="preset-btn" data-ratio="16:9">16:9</button>
+                        <button class="preset-btn" data-ratio="4:3">4:3</button>
+                        <button class="preset-btn" data-ratio="1:1">1:1</button>
+                        <button class="preset-btn" data-ratio="custom">カスタム</button>
+                        <button class="reset-btn">初期値にリセット</button>
+                    </div>
+                    <div class="size-inputs">
+                        <div class="input-group">
+                            <label>幅 (px)</label>
+                            <input type="number" class="size-input" id="attachmentWidth" min="100" max="10000" step="50"
+                                value="500">
+                        </div>
+                        <div class="input-group">
+                            <label>高さ (px)</label>
+                            <input type="number" class="size-input" id="attachmentHeight" min="100" max="10000"
+                                step="50" value="500">
+                        </div>
+                        <div class="input-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="attachmentMaintainRatio" checked>
+                                比率を維持
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -106,6 +215,33 @@
                         </div>
                     </label>
                 </div>
+                <div class="window-size-settings" id="webclassWindowSize" style="display: none;">
+                    <div class="size-presets">
+                        <button class="preset-btn" data-ratio="16:9">16:9</button>
+                        <button class="preset-btn" data-ratio="4:3">4:3</button>
+                        <button class="preset-btn" data-ratio="1:1">1:1</button>
+                        <button class="preset-btn" data-ratio="custom">カスタム</button>
+                        <button class="reset-btn">初期値にリセット</button>
+                    </div>
+                    <div class="size-inputs">
+                        <div class="input-group">
+                            <label>幅 (px)</label>
+                            <input type="number" class="size-input" id="webclassWidth" min="100" max="10000" step="50"
+                                value="1600">
+                        </div>
+                        <div class="input-group">
+                            <label>高さ (px)</label>
+                            <input type="number" class="size-input" id="webclassHeight" min="100" max="10000" step="50"
+                                value="898">
+                        </div>
+                        <div class="input-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="webclassMaintainRatio" checked>
+                                比率を維持
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- その他のリンク -->
@@ -132,6 +268,33 @@
                             <div class="option-title">同じタブ</div>
                         </div>
                     </label>
+                </div>
+                <div class="window-size-settings" id="linkWindowSize" style="display: none;">
+                    <div class="size-presets">
+                        <button class="preset-btn" data-ratio="16:9">16:9</button>
+                        <button class="preset-btn" data-ratio="4:3">4:3</button>
+                        <button class="preset-btn" data-ratio="1:1">1:1</button>
+                        <button class="preset-btn" data-ratio="custom">カスタム</button>
+                        <button class="reset-btn">初期値にリセット</button>
+                    </div>
+                    <div class="size-inputs">
+                        <div class="input-group">
+                            <label>幅 (px)</label>
+                            <input type="number" class="size-input" id="linkWidth" min="100" max="10000" step="50"
+                                value="800">
+                        </div>
+                        <div class="input-group">
+                            <label>高さ (px)</label>
+                            <input type="number" class="size-input" id="linkHeight" min="100" max="10000" step="50"
+                                value="600">
+                        </div>
+                        <div class="input-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="linkMaintainRatio" checked>
+                                比率を維持
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
