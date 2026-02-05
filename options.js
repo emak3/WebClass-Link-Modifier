@@ -57,8 +57,24 @@ function removeDomain(index) {
     });
 }
 
+// 権限を要求する関数
+async function requestPermissionsForDomains(domains) {
+    const origins = domains.map(domain => `https://${domain}/*`);
+    
+    try {
+        const granted = await chrome.permissions.request({
+            origins: origins
+        });
+        
+        return granted;
+    } catch (error) {
+        console.error('権限要求エラー:', error);
+        return false;
+    }
+}
+
 // 設定を保存
-function saveDomains() {
+async function saveDomains() {
     const inputs = document.querySelectorAll('.domain-item input[type="text"]');
     const domains = [];
     
@@ -79,12 +95,29 @@ function saveDomains() {
         return;
     }
     
+    // 新しいドメインに対して権限を要求
+    const newDomains = domains.filter(d => !DEFAULT_DOMAINS.includes(d));
+    
+    if (newDomains.length > 0) {
+        showStatus('新しいドメインへのアクセス権限を要求しています...', 'info');
+        
+        const granted = await requestPermissionsForDomains(domains);
+        
+        if (!granted) {
+            showStatus('権限が拒否されました。拡張機能は設定したドメインで動作しません。', 'error');
+            return;
+        }
+    }
+    
     // 保存
     chrome.storage.sync.set({ domains: domains }, function() {
-        showStatus('設定を保存しました', 'success');
+        showStatus('設定を保存しました。対象ページを再読み込みしてください。', 'success');
         
-        // background.jsに通知して権限を更新
-        chrome.runtime.sendMessage({ action: 'updatePermissions', domains: domains });
+        // background.jsに通知
+        chrome.runtime.sendMessage({ 
+            action: 'updatePermissions', 
+            domains: domains 
+        });
     });
 }
 
@@ -95,9 +128,11 @@ function showStatus(message, type) {
     statusMessage.className = `status-message ${type}`;
     statusMessage.style.display = 'block';
     
-    setTimeout(() => {
-        statusMessage.style.display = 'none';
-    }, 3000);
+    if (type !== 'info') {
+        setTimeout(() => {
+            statusMessage.style.display = 'none';
+        }, 5000);
+    }
 }
 
 // イベントリスナーを設定

@@ -154,6 +154,10 @@ h1 {
     color: #ed4245;
 }
 
+.status-message.info {
+    color: #00b0f4;
+}
+
 .example {
     background-color: #1e1f22;
     padding: 8px 12px;

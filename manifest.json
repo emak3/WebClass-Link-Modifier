@@ -1,31 +1,39 @@
 {
-    "manifest_version": 3,
-    "name": "WebClass Link Modifier",
-    "version": "2.0",
-    "description": "WebClassサイトのリンクを設定したドメインで管理し、新しいタブで適切に開くようにします",
-    "permissions": ["scripting", "webNavigation", "storage"],
-    "host_permissions": [
-      "https://*/*"
-    ],
-    "content_scripts": [
-      {
-        "matches": [
-          "https://*/*"
-        ],
-        "js": ["content.js"],
-        "run_at": "document_start",
-        "all_frames": true
-      }
-    ],
-    "background": {
-      "service_worker": "background.js"
-    },
-    "options_ui": {
-      "page": "options.html",
-      "open_in_tab": true
-    },
-    "icons": {
-      "48": "icon48.png",
-      "128": "icon128.png"
+  "manifest_version": 3,
+  "name": "WebClass Link Modifier",
+  "version": "2.2",
+  "description": "WebClassサイトのリンクを設定したドメインで管理し、新しいタブで適切に開くようにします",
+  "permissions": [
+    "scripting",
+    "webNavigation",
+    "storage"
+  ],
+  "optional_permissions": [],
+  "host_permissions": [
+    "https://lms.salesio-sp.ac.jp/*"
+  ],
+  "optional_host_permissions": [
+    "https://*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://lms.salesio-sp.ac.jp/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": true
     }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
   }
+}

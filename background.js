@@ -18,6 +18,47 @@ function generateUrlFilters(domains) {
   return filters;
 }
 
+// content scriptを動的に登録
+async function registerContentScripts(domains) {
+  try {
+    // 既存の動的content scriptを削除
+    await chrome.scripting.unregisterContentScripts();
+    
+    // 権限があるドメインのみフィルタリング
+    const allowedDomains = [];
+    
+    for (const domain of domains) {
+      const hasPermission = await chrome.permissions.contains({
+        origins: [`https://${domain}/*`]
+      });
+      
+      if (hasPermission) {
+        allowedDomains.push(domain);
+      }
+    }
+    
+    if (allowedDomains.length === 0) {
+      console.log('権限のあるドメインがありません');
+      return;
+    }
+    
+    // 新しいcontent scriptを登録
+    const matches = allowedDomains.map(domain => `https://${domain}/*`);
+    
+    await chrome.scripting.registerContentScripts([{
+      id: 'webclass-modifier',
+      matches: matches,
+      js: ['content.js'],
+      runAt: 'document_start',
+      allFrames: true
+    }]);
+    
+    console.log('Content scripts registered for:', allowedDomains);
+  } catch (error) {
+    console.error('Content script登録エラー:', error);
+  }
+}
+
 // リスナーを設定
 function setupListeners() {
   // 既存のリスナーを削除
@@ -46,6 +87,9 @@ function setupListeners() {
     } catch (error) {
       console.error('onBeforeNavigateリスナー設定エラー:', error);
     }
+    
+    // content scriptも再登録
+    registerContentScripts(domains);
   });
 }
 
@@ -53,12 +97,9 @@ function setupListeners() {
 function onCompletedListener(details) {
   try {
     if (details.frameId === 0) {
-      chrome.scripting.executeScript({
-        target: { tabId: details.tabId },
-        files: ['content.js']
-      }).catch(function(error) {
-        console.error('スクリプト実行エラー:', error);
-      });
+      // content scriptが既に登録されているので、
+      // 必要に応じて追加の処理を行う
+      console.log('Page completed:', details.url);
     }
   } catch (error) {
     console.error('onCompletedエラー:', error);
@@ -98,5 +139,16 @@ chrome.runtime.onInstalled.addListener(function() {
       chrome.storage.sync.set({ domains: DEFAULT_DOMAINS });
     }
   });
+  setupListeners();
+});
+
+// 権限変更を監視
+chrome.permissions.onAdded.addListener(function(permissions) {
+  console.log('権限が追加されました:', permissions);
+  setupListeners();
+});
+
+chrome.permissions.onRemoved.addListener(function(permissions) {
+  console.log('権限が削除されました:', permissions);
   setupListeners();
 });
