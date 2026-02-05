@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "WebClass Link Modifier",
-  "version": "2.2",
-  "description": "WebClassサイトのリンクを設定したドメインで管理し、新しいタブで適切に開くようにします",
+  "version": "3.1",
+  "description": "WebClassサイトのリンクを設定したドメインで管理し、リンクの開き方を個別にカスタマイズできます",
   "permissions": [
     "scripting",
     "webNavigation",
@@ -20,20 +20,20 @@
       "matches": [
         "https://lms.salesio-sp.ac.jp/*"
       ],
-      "js": ["content.js"],
+      "js": ["js/content.js"],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "js/background.js"
   },
   "options_ui": {
-    "page": "options.html",
+    "page": "html/options.html",
     "open_in_tab": true
   },
   "icons": {
-    "48": "icon48.png",
-    "128": "icon128.png"
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   }
 }

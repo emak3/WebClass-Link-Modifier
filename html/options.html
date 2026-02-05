@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebClass Link Modifier - 設定</title>
+    <link rel="stylesheet" href="css/options.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>WebClass Link Modifier 設定</h1>
+        <p class="subtitle">リンクの開き方を個別に設定できます</p>
+
+        <div class="info">
+            <div class="info-title">使い方</div>
+            <div class="info-text">
+                1. 各リンクタイプの開き方を選択してください<br>
+                2. 使用するWebClassのドメインを設定してください<br>
+                3. 「設定を保存」ボタンをクリックして保存します<br>
+                4. 設定を変更した後は、対象のページを再読み込みしてください
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">リンクの開き方（個別設定）</div>
+
+            <!-- メールリンク -->
+            <div class="setting-group">
+                <div class="setting-label">メールリンク</div>
+                <div class="link-behavior-options">
+                    <label class="radio-option compact">
+                        <input type="radio" name="mailBehavior" value="newTab" checked>
+                        <div class="option-content">
+                            <div class="option-title">別のタブ</div>
+                        </div>
+                    </label>
+
+                    <label class="radio-option compact">
+                        <input type="radio" name="mailBehavior" value="newWindow">
+                        <div class="option-content">
+                            <div class="option-title">サブウィンドウ</div>
+                        </div>
+                    </label>
+
+                    <label class="radio-option compact">
+                        <input type="radio" name="mailBehavior" value="sameTab">
+                        <div class="option-content">
+                            <div class="option-title">同じタブ</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+<!-- PDFなどのファイル -->
+            <div class="setting-group">
+                <div class="setting-label">PDFなどのファイル</div>
+                <div class="link-behavior-options">
+                    <label class="radio-option compact">
+                        <input type="radio" name="fileBehavior" value="newTab" checked>
+                        <div class="option-content">
+                            <div class="option-title">別のタブ</div>
+                        </div>
+                    </label>
+
+                    <label class="radio-option compact">
+                        <input type="radio" name="fileBehavior" value="newWindow">
+                        <div class="option-content">
+                            <div class="option-title">サブウィンドウ</div>
+                        </div>
+                    </label>
+
+                    <label class="radio-option compact disabled">
+                        <input type="radio" name="fileBehavior" value="sameTab" disabled>
+                        <div class="option-content">
+                            <div class="option-title">同じタブ</div>
+                        <!--    <div class="option-description">(PDFは利用不可)</div>    -->
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- WebClassログイン画面 -->
+            <div class="setting-group">
+                <div class="setting-label">WebClassログイン画面</div>
+                <div class="link-behavior-options">
+                    <label class="radio-option compact">
+                        <input type="radio" name="webclassBehavior" value="newTab">
+                        <div class="option-content">
+                            <div class="option-title">別のタブ</div>
+                        </div>
+                    </label>
+
+                    <label class="radio-option compact">
+                        <input type="radio" name="webclassBehavior" value="newWindow">
+                        <div class="option-content">
+                            <div class="option-title">サブウィンドウ</div>
+                        </div>
+                    </label>
+
+                    <label class="radio-option compact">
+                        <input type="radio" name="webclassBehavior" value="sameTab" checked>
+                        <div class="option-content">
+                            <div class="option-title">同じタブ</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- その他のリンク -->
+            <div class="setting-group">
+                <div class="setting-label">その他のリンク</div>
+                <div class="link-behavior-options">
+                    <label class="radio-option compact">
+                        <input type="radio" name="linkBehavior" value="newTab" checked>
+                        <div class="option-content">
+                            <div class="option-title">別のタブ</div>
+                        </div>
+                    </label>
+
+                    <label class="radio-option compact">
+                        <input type="radio" name="linkBehavior" value="newWindow">
+                        <div class="option-content">
+                            <div class="option-title">サブウィンドウ</div>
+                        </div>
+                    </label>
+
+                    <label class="radio-option compact">
+                        <input type="radio" name="linkBehavior" value="sameTab">
+                        <div class="option-content">
+                            <div class="option-title">同じタブ</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">対象ドメイン</div>
+            <div class="info-text" style="margin-bottom: 10px;">
+                例: lms.example.ac.jp または example.ac.jp
+            </div>
+            <div id="domainList" class="domain-list"></div>
+            <button id="addDomainBtn" class="add-domain-btn">+ ドメインを追加</button>
+        </div>
+
+        <button id="saveBtn" class="save-btn">設定を保存</button>
+        <div id="statusMessage" class="status-message"></div>
+    </div>
+
+    <footer>
+        お問い合わせ: <a href="mailto:wc-contact@ouma3.org">wc-contact@ouma3.org</a>
+        privacypolicy: <a href="https://wc-privacypolicy.ouma3.org/">Privacy Policy</a>
+    </footer>
+
+    <script src="../js/options.js"></script>
+</body>
+
+</html>

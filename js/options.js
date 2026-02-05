@@ -1,11 +1,40 @@
 // デフォルトのドメイン
 const DEFAULT_DOMAINS = ['lms.salesio-sp.ac.jp'];
+const DEFAULT_SETTINGS = {
+    linkBehavior: 'newTab',
+    mailBehavior: 'newTab',
+    fileBehavior: 'newTab',
+    webclassBehavior: 'sameTab'
+};
 
 // ドメイン一覧を読み込む
 function loadDomains() {
     chrome.storage.sync.get(['domains'], function(result) {
         const domains = result.domains || DEFAULT_DOMAINS;
         displayDomains(domains);
+    });
+}
+
+// リンクの開き方設定を読み込む
+function loadLinkBehavior() {
+    chrome.storage.sync.get(['linkBehavior', 'mailBehavior', 'fileBehavior', 'webclassBehavior'], function(result) {
+        const settings = {
+            linkBehavior: result.linkBehavior || DEFAULT_SETTINGS.linkBehavior,
+            mailBehavior: result.mailBehavior || DEFAULT_SETTINGS.mailBehavior,
+            fileBehavior: result.fileBehavior || DEFAULT_SETTINGS.fileBehavior,
+            webclassBehavior: result.webclassBehavior || DEFAULT_SETTINGS.webclassBehavior
+        };
+        
+        // 各ラジオボタンを設定
+        Object.keys(settings).forEach(key => {
+            const radios = document.getElementsByName(key);
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].value === settings[key]) {
+                    radios[i].checked = true;
+                    break;
+                }
+            }
+        });
     });
 }
 
@@ -95,6 +124,25 @@ async function saveDomains() {
         return;
     }
     
+    // 各リンクの開き方を取得
+    const getRadioValue = (name) => {
+        const radios = document.getElementsByName(name);
+        for (let i = 0; i < radios.length; i++) {
+            if (radios[i].checked) {
+                return radios[i].value;
+            }
+        }
+        return DEFAULT_SETTINGS[name];
+    };
+    
+    const settings = {
+        domains: domains,
+        linkBehavior: getRadioValue('linkBehavior'),
+        mailBehavior: getRadioValue('mailBehavior'),
+        fileBehavior: getRadioValue('fileBehavior'),
+        webclassBehavior: getRadioValue('webclassBehavior')
+    };
+    
     // 新しいドメインに対して権限を要求
     const newDomains = domains.filter(d => !DEFAULT_DOMAINS.includes(d));
     
@@ -110,7 +158,7 @@ async function saveDomains() {
     }
     
     // 保存
-    chrome.storage.sync.set({ domains: domains }, function() {
+    chrome.storage.sync.set(settings, function() {
         showStatus('設定を保存しました。対象ページを再読み込みしてください。', 'success');
         
         // background.jsに通知
@@ -138,6 +186,7 @@ function showStatus(message, type) {
 // イベントリスナーを設定
 document.addEventListener('DOMContentLoaded', function() {
     loadDomains();
+    loadLinkBehavior();
     
     document.getElementById('addDomainBtn').addEventListener('click', addDomain);
     document.getElementById('saveBtn').addEventListener('click', saveDomains);
