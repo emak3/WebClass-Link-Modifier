@@ -34,7 +34,7 @@ WebClassサイトのリンク動作を改善する拡張機能です。
 
 2. WebClass Link Modifier の「拡張機能オプション」を選択
 
-   <img width="1354" height="1105" alt="screenshot 2026-02-06(01-40-03)@2x" src="https://github.com/user-attachments/assets/83124f2f-2307-44b4-bb5d-f45ca43d844b" />
+   <img width="1000" height="815" alt="screenshot 2026-02-06(01-40-03)@2x" src="https://github.com/user-attachments/assets/83124f2f-2307-44b4-bb5d-f45ca43d844b" />
 
 4. 使用するWebClassサイトのドメインを設定
    - デフォルト: `lms.salesio-sp.ac.jp`
