@@ -34,13 +34,15 @@ WebClassサイトのリンク動作を改善する拡張機能です。
 
 2. WebClass Link Modifier の「拡張機能オプション」を選択
 
-3. 使用するWebClassサイトのドメインを設定
+   <img width="550" height="446" alt="screenshot 2026-02-06(01-40-03)@2x" src="https://github.com/user-attachments/assets/83124f2f-2307-44b4-bb5d-f45ca43d844b" />
+
+4. 使用するWebClassサイトのドメインを設定
    - デフォルト: `lms.salesio-sp.ac.jp`
    - 例: `lms.example.ac.jp` または `webclass.university.ac.jp`
 
-4. 「設定を保存」をクリック
+5. 「設定を保存」をクリック
 
-5. 対象のWebClassサイトを開いているタブがあれば、再読み込みする
+6. 対象のWebClassサイトを開いているタブがあれば、再読み込みする
 
 ## ドメインの追加方法
 
