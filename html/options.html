@@ -10,11 +10,26 @@
 
 <body>
     <div class="container">
-        <h1>WebClass Link Modifier 設定</h1>
+        <h1>
+            <svg class="title-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                    d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" />
+                <circle cx="12" cy="12" r="3" />
+            </svg>
+            WebClass Link Modifier 設定
+        </h1>
         <p class="subtitle">リンクの開き方を個別に設定できます</p>
 
         <div class="info">
-            <div class="info-title">使い方</div>
+            <div class="info-title">
+                <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 16v-4m0-4h.01" />
+                </svg>
+                使い方
+            </div>
             <div class="info-text">
                 1. 各リンクタイプの開き方を選択してください<br>
                 2. 使用するWebClassのドメインを設定してください<br>
@@ -24,41 +39,117 @@
         </div>
 
         <div class="section">
-            <div class="section-title">リンクの開き方（個別設定）</div>
+            <div class="section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-external-link-icon lucide-external-link">
+                    <path d="M15 3h6v6" />
+                    <path d="M10 14 21 3" />
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                </svg>
+                リンクの開き方（個別設定）
+            </div>
 
-            <!-- メールリンク -->
+            <!-- メールボックス -->
             <div class="setting-group">
                 <div class="setting-label">
-                    メールボックス
-                    <div class="setting-description">
-                        メール（メッセージエディタ）を押した時のタブを指定できます。
+                    <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                    <div class="setting-label-content">
+                        <span class="setting-label-text">メールボックス</span>
+                        <span class="setting-description">メール（メッセージエディタ）を押した時のタブを指定できます。</span>
                     </div>
                 </div>
-
                 <div class="link-behavior-options">
                     <label class="radio-option compact">
                         <input type="radio" name="mailBehavior" value="newTab" checked>
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">別のタブ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="15" x2="15" y1="12" y2="18" />
+                                    <line x1="12" x2="18" y1="15" y2="15" />
+                                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                                </svg>
+                                別のタブ
+                            </div>
                             <div class="option-description">新しいタブで開きます</div>
                         </div>
                     </label>
 
                     <label class="radio-option compact">
                         <input type="radio" name="mailBehavior" value="newWindow">
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">サブウィンドウ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-app-window-icon lucide-app-window">
+                                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                                    <path d="M10 4v4" />
+                                    <path d="M2 8h20" />
+                                    <path d="M6 4v4" />
+                                </svg>
+                                サブウィンドウ
+                            </div>
                             <div class="option-description">Full screen時は利用不可</div>
                         </div>
                     </label>
 
                     <label class="radio-option compact">
                         <input type="radio" name="mailBehavior" value="sameTab">
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">同じタブ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                                    <path d="M8 12h8" />
+                                    <path d="M12 8v8" />
+                                </svg>
+                                同じタブ
+                            </div>
                             <div class="option-description">Clickしたタブで開きます</div>
                         </div>
                     </label>
+
                 </div>
                 <div class="window-size-settings" id="mailWindowSize" style="display: none;">
                     <div class="size-presets">
@@ -72,16 +163,16 @@
                         <div class="input-group">
                             <label>幅 (px)</label>
                             <input type="number" class="size-input" id="mailWidth" min="100" max="10000" step="50"
-                                value="800">
+                                value="800" aria-label="メールボックスウィンドウの幅">
                         </div>
                         <div class="input-group">
                             <label>高さ (px)</label>
                             <input type="number" class="size-input" id="mailHeight" min="100" max="10000" step="50"
-                                value="600">
+                                value="600" aria-label="メールボックスウィンドウの高さ">
                         </div>
                         <div class="input-group checkbox-group">
                             <label>
-                                <input type="checkbox" id="mailMaintainRatio" checked>
+                                <input type="checkbox" id="mailMaintainRatio" checked aria-label="メールボックスウィンドウの比率を維持">
                                 比率を維持
                             </label>
                         </div>
@@ -89,38 +180,108 @@
                 </div>
             </div>
 
+
             <!-- PDFなどのファイル -->
             <div class="setting-group">
                 <div class="setting-label">
-                    PDFなどのファイル
-                    <div class="setting-description">
-                        PDFを<span class="underline">別ウインドウ</span>で開く時のタブを指定できます。
+                    <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+                        <polyline points="13 2 13 9 20 9" />
+                    </svg>
+                    <div class="setting-label-content">
+                        <span class="setting-label-text">PDFなどのファイル</span>
+                        <span class="setting-description">PDFを<span
+                                class="underline">別ウインドウ</span>で開く時のタブを指定できます。</span>
                     </div>
                 </div>
                 <div class="link-behavior-options">
                     <label class="radio-option compact">
                         <input type="radio" name="fileBehavior" value="newTab" checked>
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">別のタブ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="15" x2="15" y1="12" y2="18" />
+                                    <line x1="12" x2="18" y1="15" y2="15" />
+                                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                                </svg>
+                                別のタブ
+                            </div>
                             <div class="option-description">新しいタブで開きます</div>
                         </div>
                     </label>
 
                     <label class="radio-option compact">
                         <input type="radio" name="fileBehavior" value="newWindow">
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">サブウィンドウ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-app-window-icon lucide-app-window">
+                                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                                    <path d="M10 4v4" />
+                                    <path d="M2 8h20" />
+                                    <path d="M6 4v4" />
+                                </svg>
+                                サブウィンドウ
+                            </div>
                             <div class="option-description">Full screen時は利用不可</div>
                         </div>
                     </label>
 
                     <label class="radio-option compact disabled">
                         <input type="radio" name="fileBehavior" value="sameTab" disabled>
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">同じタブ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                                    <path d="M8 12h8" />
+                                    <path d="M12 8v8" />
+                                </svg>
+                                同じタブ
+                            </div>
                             <div class="option-description">(PDFは利用不可)</div>
                         </div>
                     </label>
+
                 </div>
                 <div class="window-size-settings" id="fileWindowSize" style="display: none;">
                     <div class="size-presets">
@@ -134,16 +295,17 @@
                         <div class="input-group">
                             <label>幅 (px)</label>
                             <input type="number" class="size-input" id="fileWidth" min="100" max="10000" step="50"
-                                value="1200">
+                                value="1200" aria-label="PDFなどのファイルウィンドウの幅">
                         </div>
                         <div class="input-group">
                             <label>高さ (px)</label>
                             <input type="number" class="size-input" id="fileHeight" min="100" max="10000" step="50"
-                                value="900">
+                                value="900" aria-label="PDFなどのファイルウィンドウの高さ">
                         </div>
                         <div class="input-group checkbox-group">
                             <label>
-                                <input type="checkbox" id="fileMaintainRatio" checked>
+                                <input type="checkbox" id="fileMaintainRatio" checked
+                                    aria-label="PDFなどのファイルウィンドウの比率を維持">
                                 比率を維持
                             </label>
                         </div>
@@ -151,38 +313,108 @@
                 </div>
             </div>
 
+
             <!-- 添付資料リンク -->
             <div class="setting-group">
                 <div class="setting-label">
-                    添付資料リンク
-                    <div class="setting-description">
-                        <span class="underline">添付資料</span>をダウンロードする時に開くタブを指定できます。
+                    <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path
+                            d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+                    </svg>
+                    <div class="setting-label-content">
+                        <span class="setting-label-text">添付資料リンク</span>
+                        <span class="setting-description"><span
+                                class="underline">添付資料</span>をダウンロードする時に開くタブを指定できます。</span>
                     </div>
                 </div>
                 <div class="link-behavior-options">
                     <label class="radio-option compact">
-                        <input type="radio" name="attachmentBehavior" value="newTab">
+                        <input type="radio" name="attachmentBehavior" value="newTab" checked>
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">別のタブ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="15" x2="15" y1="12" y2="18" />
+                                    <line x1="12" x2="18" y1="15" y2="15" />
+                                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                                </svg>
+                                別のタブ
+                            </div>
                             <div class="option-description">新しいタブで開きます</div>
                         </div>
                     </label>
 
                     <label class="radio-option compact">
-                        <input type="radio" name="attachmentBehavior" value="newWindow" checked>
+                        <input type="radio" name="attachmentBehavior" value="newWindow">
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">サブウィンドウ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-app-window-icon lucide-app-window">
+                                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                                    <path d="M10 4v4" />
+                                    <path d="M2 8h20" />
+                                    <path d="M6 4v4" />
+                                </svg>
+                                サブウィンドウ
+                            </div>
                             <div class="option-description">Full screen時は利用不可</div>
                         </div>
                     </label>
 
                     <label class="radio-option compact disabled">
                         <input type="radio" name="attachmentBehavior" value="sameTab" disabled>
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">同じタブ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                                    <path d="M8 12h8" />
+                                    <path d="M12 8v8" />
+                                </svg>
+                                同じタブ
+                            </div>
                             <div class="option-description">(添付資料は利用不可)</div>
                         </div>
                     </label>
+
                 </div>
                 <div class="window-size-settings" id="attachmentWindowSize" style="display: none;">
                     <div class="size-presets">
@@ -196,16 +428,17 @@
                         <div class="input-group">
                             <label>幅 (px)</label>
                             <input type="number" class="size-input" id="attachmentWidth" min="100" max="10000" step="50"
-                                value="500">
+                                value="500" aria-label="添付資料リンクウィンドウの幅">
                         </div>
                         <div class="input-group">
                             <label>高さ (px)</label>
                             <input type="number" class="size-input" id="attachmentHeight" min="100" max="10000"
-                                step="50" value="500">
+                                step="50" value="500" aria-label="添付資料リンクウィンドウの高さ">
                         </div>
                         <div class="input-group checkbox-group">
                             <label>
-                                <input type="checkbox" id="attachmentMaintainRatio" checked>
+                                <input type="checkbox" id="attachmentMaintainRatio" checked
+                                    aria-label="添付資料リンクウィンドウの比率を維持">
                                 比率を維持
                             </label>
                         </div>
@@ -213,38 +446,108 @@
                 </div>
             </div>
 
+
             <!-- WebClassログイン画面 -->
             <div class="setting-group">
                 <div class="setting-label">
-                    WebClassログイン画面
-                    <div class="setting-description">
-                        <span class="underline">>> ログイン画面を表示する</span>を押した時の開くタブを指定できます。
+                    <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                    <div class="setting-label-content">
+                        <span class="setting-label-text">WebClassログイン画面</span>
+                        <span class="setting-description"><span class="underline">>>
+                                ログイン画面を表示する</span>を押した時の開くタブを指定できます。</span>
                     </div>
                 </div>
                 <div class="link-behavior-options">
                     <label class="radio-option compact">
                         <input type="radio" name="webclassBehavior" value="newTab">
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">別のタブ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="15" x2="15" y1="12" y2="18" />
+                                    <line x1="12" x2="18" y1="15" y2="15" />
+                                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                                </svg>
+                                別のタブ
+                            </div>
                             <div class="option-description">新しいタブで開きます</div>
                         </div>
                     </label>
 
                     <label class="radio-option compact">
                         <input type="radio" name="webclassBehavior" value="newWindow">
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">サブウィンドウ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-app-window-icon lucide-app-window">
+                                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                                    <path d="M10 4v4" />
+                                    <path d="M2 8h20" />
+                                    <path d="M6 4v4" />
+                                </svg>
+                                サブウィンドウ
+                            </div>
                             <div class="option-description">Full screen時は利用不可</div>
                         </div>
                     </label>
 
                     <label class="radio-option compact">
                         <input type="radio" name="webclassBehavior" value="sameTab" checked>
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">同じタブ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                                    <path d="M8 12h8" />
+                                    <path d="M12 8v8" />
+                                </svg>
+                                同じタブ
+                            </div>
                             <div class="option-description">Clickしたタブで開きます</div>
                         </div>
                     </label>
+
                 </div>
                 <div class="window-size-settings" id="webclassWindowSize" style="display: none;">
                     <div class="size-presets">
@@ -258,16 +561,17 @@
                         <div class="input-group">
                             <label>幅 (px)</label>
                             <input type="number" class="size-input" id="webclassWidth" min="100" max="10000" step="50"
-                                value="1600">
+                                value="1600" aria-label="WebClassログイン画面ウィンドウの幅">
                         </div>
                         <div class="input-group">
                             <label>高さ (px)</label>
                             <input type="number" class="size-input" id="webclassHeight" min="100" max="10000" step="50"
-                                value="898">
+                                value="898" aria-label="WebClassログイン画面ウィンドウの高さ">
                         </div>
                         <div class="input-group checkbox-group">
                             <label>
-                                <input type="checkbox" id="webclassMaintainRatio" checked>
+                                <input type="checkbox" id="webclassMaintainRatio" checked
+                                    aria-label="WebClassログイン画面ウィンドウの比率を維持">
                                 比率を維持
                             </label>
                         </div>
@@ -275,38 +579,107 @@
                 </div>
             </div>
 
-            <!-- その他のリンク -->
+
+            <!-- 授業リンク -->
             <div class="setting-group">
                 <div class="setting-label">
-                    授業リンク
-                    <div class="setting-description">
-                        コースを押した時に開くタブを指定できます。
+                    <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    </svg>
+                    <div class="setting-label-content">
+                        <span class="setting-label-text">授業リンク</span>
+                        <span class="setting-description">コースを押した時に開くタブを指定できます。</span>
                     </div>
                 </div>
                 <div class="link-behavior-options">
                     <label class="radio-option compact">
                         <input type="radio" name="linkBehavior" value="newTab" checked>
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">別のタブ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="15" x2="15" y1="12" y2="18" />
+                                    <line x1="12" x2="18" y1="15" y2="15" />
+                                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                                </svg>
+                                別のタブ
+                            </div>
                             <div class="option-description">新しいタブで開きます</div>
                         </div>
                     </label>
 
                     <label class="radio-option compact">
                         <input type="radio" name="linkBehavior" value="newWindow">
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">サブウィンドウ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-app-window-icon lucide-app-window">
+                                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                                    <path d="M10 4v4" />
+                                    <path d="M2 8h20" />
+                                    <path d="M6 4v4" />
+                                </svg>
+                                サブウィンドウ
+                            </div>
                             <div class="option-description">Full screen時は利用不可</div>
                         </div>
                     </label>
 
                     <label class="radio-option compact">
                         <input type="radio" name="linkBehavior" value="sameTab">
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
                         <div class="option-content">
-                            <div class="option-title">同じタブ</div>
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                                    <path d="M8 12h8" />
+                                    <path d="M12 8v8" />
+                                </svg>
+                                同じタブ
+                            </div>
                             <div class="option-description">Clickしたタブで開きます</div>
                         </div>
                     </label>
+
                 </div>
                 <div class="window-size-settings" id="linkWindowSize" style="display: none;">
                     <div class="size-presets">
@@ -320,43 +693,69 @@
                         <div class="input-group">
                             <label>幅 (px)</label>
                             <input type="number" class="size-input" id="linkWidth" min="100" max="10000" step="50"
-                                value="800">
+                                value="800" aria-label="授業リンクウィンドウの幅">
                         </div>
                         <div class="input-group">
                             <label>高さ (px)</label>
                             <input type="number" class="size-input" id="linkHeight" min="100" max="10000" step="50"
-                                value="600">
+                                value="600" aria-label="授業リンクウィンドウの高さ">
                         </div>
                         <div class="input-group checkbox-group">
                             <label>
-                                <input type="checkbox" id="linkMaintainRatio" checked>
+                                <input type="checkbox" id="linkMaintainRatio" checked aria-label="授業リンクウィンドウの比率を維持">
                                 比率を維持
                             </label>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="section">
-            <div class="section-title">対象ドメイン</div>
+            <div class="section-title">
+                <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+                対象ドメイン
+            </div>
             <div class="info-text" style="margin-bottom: 10px;">
                 例: xxx.example.ac.jp または example.ac.jp
             </div>
             <div id="domainList" class="domain-list"></div>
-            <button id="addDomainBtn" class="add-domain-btn">+ ドメインを追加</button>
+            <button id="addDomainBtn" class="add-domain-btn">
+                <svg class="button-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                ドメインを追加
+            </button>
         </div>
 
-        <button id="saveBtn" class="save-btn">設定を保存</button>
+        <button id="saveBtn" class="save-btn">
+            <svg class="button-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                    d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+                <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
+                <path d="M7 3v4a1 1 0 0 0 1 1h7" />
+            </svg>
+            設定を保存
+        </button>
         <div id="statusMessage" class="status-message"></div>
     </div>
 
     <footer>
-        お問い合わせ: <a href="mailto:wc-contact@ouma3.org">wc-contact@ouma3.org</a>
-        privacypolicy: <a href="https://wc-privacypolicy.ouma3.org/">Privacy Policy</a>
+        お問い合わせ: <a href="mailto:wc-contact@ouma3.org">wc-contact@ouma3.org</a> |
+        <a href="../index.html">プライバシーポリシー</a>
     </footer>
-
     <script src="../js/options.js"></script>
 </body>
 
 </html>
+<!-- Icons from Lucide (https://lucide.dev) - MIT License -->

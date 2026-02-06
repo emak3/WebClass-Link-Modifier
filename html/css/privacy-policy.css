@@ -26,6 +26,14 @@ h1 {
     font-size: 32px;
     margin-bottom: 10px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.title-icon {
+    flex-shrink: 0;
 }
 
 .subtitle {
@@ -52,6 +60,13 @@ h2 {
     margin-bottom: 15px;
     padding-bottom: 10px;
     border-bottom: 2px solid #5865f2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-icon {
+    flex-shrink: 0;
 }
 
 p {
@@ -62,11 +77,21 @@ p {
 ul {
     margin-left: 25px;
     margin-bottom: 15px;
+    list-style-type: none;
 }
 
 ul li {
     margin-bottom: 8px;
     color: #dcddde;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.list-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #3ba55d;
 }
 
 strong {
@@ -88,6 +113,14 @@ a:hover {
     padding: 15px;
     border-radius: 4px;
     border-left: 4px solid #5865f2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-icon {
+    flex-shrink: 0;
+    color: #00b0f4;
 }
 
 footer {
@@ -101,6 +134,49 @@ footer {
 
 footer p {
     margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.footer-icon {
+    flex-shrink: 0;
+}
+
+/* アクセシビリティ向上 */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* フォーカス表示の強化 */
+a:focus-visible {
+    outline: 3px solid #5865f2;
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* ハイコントラストモード対応 */
+@media (prefers-contrast: high) {
+    .container {
+        border: 2px solid #ffffff;
+    }
+    
+    h2 {
+        border-bottom-width: 3px;
+    }
+    
+    .contact {
+        border-left-width: 6px;
+    }
+    
+    .section-icon, .list-icon, .contact-icon, .footer-icon, .title-icon {
+        stroke-width: 3;
+    }
 }
 
 @media (max-width: 768px) {
@@ -110,9 +186,40 @@ footer p {
     
     h1 {
         font-size: 26px;
+        flex-direction: column;
+        gap: 8px;
     }
     
     h2 {
         font-size: 20px;
+        flex-wrap: wrap;
     }
+    
+    ul li {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    
+    .contact {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    footer p {
+        flex-direction: column;
+        gap: 4px;
+    }
+}
+
+/* スクリーンリーダー用の補助テキスト */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
 }

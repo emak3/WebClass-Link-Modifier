@@ -1,69 +1,213 @@
-# <img width="80" height="80" alt="icon1080" src="https://github.com/user-attachments/assets/8d15c02d-111f-467c-b5ca-457601ef1952" /> WebClass Link Modifier
+<div align="center">
 
-WebClassサイトのリンク動作を改善する拡張機能です。
+# <img width="80" height="80" alt="WebClass Link Modifier Icon" src="https://github.com/user-attachments/assets/8d15c02d-111f-467c-b5ca-457601ef1952" /> WebClass Link Modifier
 
-## 機能
+**WebClassサイトのリンク動作を自由にカスタマイズできるブラウザ拡張機能**
 
-- WebClassサイトのリンクが新しいウィンドウで開かないようにする
-- PDFなどのファイルは新しいタブで開く
-- メールボタンなどのポップアップも新しいタブで開く
-- 対象ドメインをカスタマイズ可能
+![Version](https://img.shields.io/badge/version-3.2.2-blue.svg)
+![Chrome](https://img.shields.io/badge/Chrome-Compatible-green.svg)
+![Edge](https://img.shields.io/badge/Edge-Compatible-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-orange.svg)
 
-## Chromeへの拡張機能のインストール
+</div>
 
-1. Google Chromeを開きます
-2. アドレスバーに `chrome://extensions/` と入力してEnterキーを押します
-3. 右上の「デベロッパーモード」をオンにします
-4. 「パッケージ化されていない拡張機能を読み込む」ボタンをクリックします
-5. 先ほどダウンロードした拡張機能フォルダを__**解凍**__し（WebClass Link Modifier）を選択します
-6. 拡張機能が正常にインストールされると、拡張機能リストに表示されます
+---
 
-## Edgeへの拡張機能のインストール
+## <img src="https://api.iconify.design/lucide/book-open.svg" width="24" height="24" /> 目次
 
-1. Microsoft Edgeを開きます
-2. アドレスバーに `edge://extensions/` と入力してEnterキーを押します
-3. 左側のメニューから「開発者モード」をオンにします
-4. 「展開して読み込み」ボタンをクリックします
-5. 先ほどダウンロードした拡張機能フォルダを**解凍**し（WebClass Link Modifier）を選択します
-6. 拡張機能が正常にインストールされると、拡張機能リストに表示されます
+- [<img src="https://api.iconify.design/lucide/sparkles.svg" width="18" height="18" /> 特徴](#-特徴)
+- [<img src="https://api.iconify.design/lucide/target.svg" width="18" height="18" /> 主な機能](#-主な機能)
+- [<img src="https://api.iconify.design/lucide/package.svg" width="18" height="18" /> インストール](#-インストール)
+- [<img src="https://api.iconify.design/lucide/settings.svg" width="18" height="18" /> 初期設定](#-初期設定)
+- [<img src="https://api.iconify.design/lucide/wrench.svg" width="18" height="18" /> 使い方](#-使い方)
+- [<img src="https://api.iconify.design/lucide/lightbulb.svg" width="18" height="18" /> ヒント](#-ヒント)
+- [<img src="https://api.iconify.design/lucide/alert-triangle.svg" width="18" height="18" /> 注意事項](#-注意事項)
 
+---
 
-## 初期設定
+## <img src="https://api.iconify.design/lucide/sparkles.svg" width="24" height="24" /> 特徴
 
-1. 拡張機能をインストール後、拡張機能アイコンをクリック
+WebClass Link Modifierは、WebClassサイトでのリンクの開き方を細かく制御できる拡張機能です。煩わしい新規ウィンドウの乱立を防ぎ、快適なブラウジング体験を提供します。
 
-2. WebClass Link Modifier の「拡張機能オプション」を選択
+### <img src="https://api.iconify.design/lucide/target.svg" width="24" height="24" /> 主な機能
 
-   <img width="550" height="446" alt="screenshot 2026-02-06(01-40-03)@2x" src="https://github.com/user-attachments/assets/83124f2f-2307-44b4-bb5d-f45ca43d844b" />
+| 機能 | 説明 |
+|------|------|
+| <img src="https://api.iconify.design/lucide/link.svg" width="18" height="18" /> **リンク動作のカスタマイズ** | 各種リンクの開き方（同じタブ、新しいタブ、新しいウィンドウ）を個別に設定可能 |
+| <img src="https://api.iconify.design/lucide/mail.svg" width="18" height="18" /> **メールボックス対応** | メールリンクを設定したウィンドウサイズで開く |
+| <img src="https://api.iconify.design/lucide/file-text.svg" width="18" height="18" /> **ファイル管理** | PDFなどのファイルを新しいタブで開く |
+| <img src="https://api.iconify.design/lucide/paperclip.svg" width="18" height="18" /> **添付資料対応** | 添付資料リンクを専用ウィンドウで開く |
+| <img src="https://api.iconify.design/lucide/globe.svg" width="18" height="18" /> **マルチドメイン対応** | 複数のWebClassドメインを登録可能 |
+| <img src="https://api.iconify.design/lucide/maximize.svg" width="18" height="18" /> **ウィンドウサイズ調整** | 各リンクタイプごとにウィンドウサイズをカスタマイズ |
 
-4. 使用するWebClassサイトのドメインを設定
-   - デフォルト: `lms.salesio-sp.ac.jp`
-   - 例: `lms.example.ac.jp` または `webclass.university.ac.jp`
+---
 
-5. 「設定を保存」をクリック
+## <img src="https://api.iconify.design/lucide/package.svg" width="24" height="24" /> インストール
 
-6. 対象のWebClassサイトを開いているタブがあれば、再読み込みする
+### <img src="https://api.iconify.design/lucide/chrome.svg" width="20" height="20" /> Google Chromeの場合
 
-## ドメインの追加方法
+<img src="https://api.iconify.design/lucide/square-1.svg" width="20" height="20" /> **拡張機能ページを開く**
+```
+chrome://extensions/
+```
+をアドレスバーに入力してEnterキーを押す
+
+<img src="https://api.iconify.design/lucide/square-2.svg" width="20" height="20" /> **デベロッパーモードを有効化**
+
+右上の「デベロッパーモード」トグルをオンにする
+
+<img src="https://api.iconify.design/lucide/square-3.svg" width="20" height="20" /> **拡張機能を読み込む**
+
+「パッケージ化されていない拡張機能を読み込む」ボタンをクリック
+
+<img src="https://api.iconify.design/lucide/square-4.svg" width="20" height="20" /> **フォルダを選択**
+
+ダウンロードした拡張機能フォルダを**解凍**し、`WebClass Link Modifier`フォルダを選択
+
+<img src="https://api.iconify.design/lucide/check-circle.svg" width="20" height="20" /> **完了**
+
+拡張機能リストに表示されたら成功です！
+
+### <img src="https://api.iconify.design/lucide/browse.svg" width="20" height="20" /> Microsoft Edgeの場合
+
+<img src="https://api.iconify.design/lucide/square-1.svg" width="20" height="20" /> **拡張機能ページを開く**
+```
+edge://extensions/
+```
+をアドレスバーに入力してEnterキーを押す
+
+<img src="https://api.iconify.design/lucide/square-2.svg" width="20" height="20" /> **開発者モードを有効化**
+
+左側のメニューから「開発者モード」をオンにする
+
+<img src="https://api.iconify.design/lucide/square-3.svg" width="20" height="20" /> **拡張機能を読み込む**
+
+「展開して読み込み」ボタンをクリック
+
+<img src="https://api.iconify.design/lucide/square-4.svg" width="20" height="20" /> **フォルダを選択**
+
+ダウンロードした拡張機能フォルダを**解凍**し、`WebClass Link Modifier`フォルダを選択
+
+<img src="https://api.iconify.design/lucide/check-circle.svg" width="20" height="20" /> **完了**
+
+拡張機能リストに表示されたら成功です！
+
+---
+
+## <img src="https://api.iconify.design/lucide/settings.svg" width="24" height="24" /> 初期設定
+
+### <img src="https://api.iconify.design/lucide/mouse-pointer-click.svg" width="20" height="20" /> オプション画面を開く
+
+拡張機能アイコンをクリックし、「拡張機能オプション」を選択
+
+<img width="550" alt="オプション画面の開き方" src="https://github.com/user-attachments/assets/83124f2f-2307-44b4-bb5d-f45ca43d844b" />
+
+### <img src="https://api.iconify.design/lucide/globe.svg" width="20" height="20" /> ドメインを設定
+
+使用するWebClassサイトのドメインを設定します
+
+**デフォルトドメイン:**
+```
+lms.salesio-sp.ac.jp
+```
+
+**他の例:**
+- `lms.example.ac.jp`
+- `webclass.university.ac.jp`
+
+### <img src="https://api.iconify.design/lucide/link.svg" width="20" height="20" /> リンクの動作を設定
+
+各リンクタイプごとに開き方をカスタマイズできます：
+
+| リンクタイプ | 推奨設定 | 説明 |
+|------------|----------|------|
+| <img src="https://api.iconify.design/lucide/mail.svg" width="16" height="16" /> メールボックス | 新しいウィンドウ | メールの確認に最適 |
+| <img src="https://api.iconify.design/lucide/file-text.svg" width="16" height="16" /> PDFなどのファイル | 新しいタブ | 資料閲覧に便利 |
+| <img src="https://api.iconify.design/lucide/paperclip.svg" width="16" height="16" /> 添付資料リンク | 新しいウィンドウ | 小さいウィンドウで開く |
+| <img src="https://api.iconify.design/lucide/external-link.svg" width="16" height="16" /> その他のリンク | 同じタブ | スムーズな遷移 |
+| <img src="https://api.iconify.design/lucide/school.svg" width="16" height="16" /> WebClassログイン画面 | 同じタブ | シンプルな動作 |
+
+### <img src="https://api.iconify.design/lucide/save.svg" width="20" height="20" /> 設定を保存
+
+「設定を保存」ボタンをクリック
+
+### <img src="https://api.iconify.design/lucide/refresh-cw.svg" width="20" height="20" /> ページを再読み込み
+
+対象のWebClassサイトを開いているタブを再読み込み
+
+---
+
+## <img src="https://api.iconify.design/lucide/wrench.svg" width="24" height="24" /> 使い方
+
+### <img src="https://api.iconify.design/lucide/plus-circle.svg" width="20" height="20" /> ドメインを追加する
 
 1. オプション画面を開く
+2. 「**<img src="https://api.iconify.design/lucide/plus.svg" width="14" height="14" /> ドメインを追加**」ボタンをクリック
+3. 新しいドメインを入力（`http://`や`https://`は不要）
+   
+   例: `lms.example.ac.jp`
 
-2. 「+ ドメインを追加」ボタンをクリック
+4. 「**設定を保存**」をクリック
 
-3. 新しいドメインを入力
-   - `http://` や `https://` は不要
-   - 例: `lms.example.ac.jp`
+### <img src="https://api.iconify.design/lucide/minus-circle.svg" width="20" height="20" /> ドメインを削除する
 
-4. 「設定を保存」をクリック
+1. オプション画面で削除したいドメインの「**削除**」ボタンをクリック
+2. 「**設定を保存**」をクリック
 
-## ドメインの削除方法
+> <img src="https://api.iconify.design/lucide/alert-circle.svg" width="16" height="16" /> **注意:** 最低1つのドメインは必要です
 
-1. オプション画面で削除したいドメインの「削除」ボタンをクリック
+### <img src="https://api.iconify.design/lucide/maximize.svg" width="20" height="20" /> ウィンドウサイズを調整する
 
-2. 「設定を保存」をクリック
+各リンクタイプで「新しいウィンドウ」を選択した場合、ウィンドウサイズを設定できます：
 
-## 注意事項
+- **プリセット比率**: 16:9、4:3、1:1から選択
+- **カスタムサイズ**: 幅と高さをピクセル単位で指定
+- **比率を維持**: ウィンドウのリサイズ時に比率を保つ
 
-- ドメインは少なくとも1つ必要です
-- 設定を変更した後は、対象ページを再読み込みしてください
-- すべてのサイトへのアクセス権限が必要ですが、設定したドメインでのみ動作します
+---
+
+## <img src="https://api.iconify.design/lucide/lightbulb.svg" width="24" height="24" /> ヒント
+
+### <img src="https://api.iconify.design/lucide/palette.svg" width="20" height="20" /> 推奨設定例
+
+**学習に集中したい場合:**
+```
+メールボックス: 新しいウィンドウ (800x600)
+PDFファイル: 新しいタブ
+添付資料: 新しいウィンドウ (500x500)
+その他リンク: 同じタブ
+```
+
+**マルチタスクする場合:**
+```
+すべて: 新しいタブ
+```
+
+### <img src="https://api.iconify.design/lucide/zap.svg" width="20" height="20" /> パフォーマンス向上
+
+- 不要なドメインは削除する
+- 設定変更後は必ずページを再読み込みする
+- ブラウザを再起動すると設定が確実に反映されます
+
+---
+
+## <img src="https://api.iconify.design/lucide/alert-triangle.svg" width="24" height="24" /> 注意事項
+
+| 項目 | 説明 |
+|------|------|
+| <img src="https://api.iconify.design/lucide/shield.svg" width="18" height="18" /> **権限** | すべてのサイトへのアクセス権限が必要ですが、設定したドメインでのみ動作します |
+| <img src="https://api.iconify.design/lucide/refresh-cw.svg" width="18" height="18" /> **再読み込み** | 設定変更後は対象ページを再読み込みしてください |
+| <img src="https://api.iconify.design/lucide/list.svg" width="18" height="18" /> **ドメイン数** | 少なくとも1つのドメインが必要です |
+| <img src="https://api.iconify.design/lucide/link-2.svg" width="18" height="18" /> **プロトコル** | ドメイン入力時に`http://`や`https://`は不要です |
+
+---
+
+<div align="center">
+
+### <img src="https://api.iconify.design/lucide/message-circle.svg" width="20" height="20" /> フィードバック
+
+問題や要望がありましたら、[Issues](../../issues)でお知らせください
+
+**Made with <img src="https://api.iconify.design/lucide/heart.svg" width="16" height="16" /> for better WebClass experience**
+
+</div>
