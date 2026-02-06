@@ -143,10 +143,10 @@ chrome.runtime.onInstalled.addListener(function() {
       updates.domains = DEFAULT_DOMAINS;
     }
     if (!result.linkBehavior) {
-      updates.linkBehavior = 'newTab'; // その他のリンク
+      updates.linkBehavior = 'sameTab'; // その他のリンク
     }
     if (!result.mailBehavior) {
-      updates.mailBehavior = 'newTab'; // メールリンク
+      updates.mailBehavior = 'newWindow'; // メールリンク
     }
     if (!result.fileBehavior) {
       updates.fileBehavior = 'newTab'; // PDFなどのファイル
@@ -158,7 +158,7 @@ chrome.runtime.onInstalled.addListener(function() {
       updates.attachmentBehavior = 'newWindow'; // 添付資料リンク
     }
     if (!result.mailWindowSize) {
-      updates.mailWindowSize = { width: 800, height: 800, ratio: '1:1' };
+      updates.mailWindowSize = { width: 800, height: 600, ratio: '4:3' };
     }
     if (!result.fileWindowSize) {
       updates.fileWindowSize = { width: 1200, height: 900, ratio: '4:3' };

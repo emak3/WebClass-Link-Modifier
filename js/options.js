@@ -1,8 +1,8 @@
 // デフォルトのドメイン
 const DEFAULT_DOMAINS = ['lms.salesio-sp.ac.jp'];
 const DEFAULT_SETTINGS = {
-    linkBehavior: 'newTab',
-    mailBehavior: 'newTab',
+    linkBehavior: 'sameTab',
+    mailBehavior: 'newWindow',
     fileBehavior: 'newTab',
     webclassBehavior: 'sameTab',
     attachmentBehavior: 'newWindow',

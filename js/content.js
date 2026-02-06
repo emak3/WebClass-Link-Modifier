@@ -3,8 +3,8 @@ const DEFAULT_DOMAINS = ['lms.salesio-sp.ac.jp'];
 
 // 現在のページが対象ドメインかチェック
 let isTargetDomain = false;
-let linkBehavior = 'newTab'; // その他のリンク
-let mailBehavior = 'newTab'; // メールリンク
+let linkBehavior = 'sameTab'; // 授業リンク
+let mailBehavior = 'newWindow'; // メールリンク
 let fileBehavior = 'newTab'; // PDFなどのファイル
 let webclassBehavior = 'sameTab'; // WebClassログイン画面
 let attachmentBehavior = 'newWindow'; // 添付資料リンク
@@ -22,8 +22,8 @@ chrome.storage.sync.get([
 ], function(result) {
   const domains = result.domains || DEFAULT_DOMAINS;
   const currentHost = window.location.hostname;
-  linkBehavior = result.linkBehavior || 'newTab';
-  mailBehavior = result.mailBehavior || 'newTab';
+  linkBehavior = result.linkBehavior || 'sameTab';
+  mailBehavior = result.mailBehavior || 'newWindow';
   fileBehavior = result.fileBehavior || 'newTab';
   webclassBehavior = result.webclassBehavior || 'sameTab';
   attachmentBehavior = result.attachmentBehavior || 'newWindow';

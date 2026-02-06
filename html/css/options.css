@@ -43,10 +43,22 @@ h1 {
 }
 
 .setting-label {
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 600;
     color: #ffffff;
     margin-bottom: 10px;
+}
+
+.setting-description {
+    font-size: 13px;
+    color: #b9bbbe;
+    line-height: 1.0;
+    padding-left: 10px;
+    font-weight: 300;
+}
+
+.underline {
+    border-bottom: 1px solid #b9bbbe; 
 }
 
 .link-behavior-options {
