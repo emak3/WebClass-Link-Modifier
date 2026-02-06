@@ -204,7 +204,7 @@ PDFファイル: 新しいタブ
 
 問題や要望がありましたら、以下の方法でお知らせください
 
-<img src="https://api.iconify.design/lucide/github.svg?color=%23181717" width="18" height="18" /> [Issues](../../issues) | <img src="https://api.iconify.design/lucide/mail.svg?color=%23ef4444" width="18" height="18" /> [wc-contact[AT]ouma3.org](mailto: wc-contact@ouma3.org)
+<img src="https://api.iconify.design/lucide/github.svg?color=%23181717" width="18" height="18" /> [Issues](../../issues) を作成する。または、<img src="https://api.iconify.design/lucide/mail.svg?color=%23ef4444" width="18" height="18" /> wc-contact@ouma3.org でメールを送信する。
 
 **Made with <img src="https://api.iconify.design/lucide/heart.svg?color=%23ef4444" width="16" height="16" /> for better WebClass experience**
 
