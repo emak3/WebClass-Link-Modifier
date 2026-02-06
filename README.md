@@ -1,4 +1,4 @@
-# WebClass Link Modifier
+# <img width="80" height="80" alt="icon1080" src="https://github.com/user-attachments/assets/8d15c02d-111f-467c-b5ca-457601ef1952" /> WebClass Link Modifier
 
 WebClassサイトのリンク動作を改善する拡張機能です。
 
