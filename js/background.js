@@ -19,10 +19,29 @@ function generateUrlFilters(domains) {
 }
 
 // content scriptを動的に登録
+let isRegistering = false; // 同時実行を防ぐフラグ
+
 async function registerContentScripts(domains) {
+  // 既に登録処理中の場合は処理をスキップ
+  if (isRegistering) {
+    console.log('既に登録処理中です');
+    return;
+  }
+  
+  isRegistering = true;
+  
   try {
-    // 既存の動的content scriptを削除
-    await chrome.scripting.unregisterContentScripts();
+    // すべての動的content scriptを削除
+    try {
+      const scripts = await chrome.scripting.getRegisteredContentScripts();
+      const ids = scripts.map(script => script.id);
+      if (ids.length > 0) {
+        await chrome.scripting.unregisterContentScripts({ ids: ids });
+        console.log('削除されたスクリプト:', ids);
+      }
+    } catch (e) {
+      console.log('既存のcontent scriptはありません:', e.message);
+    }
     
     // 権限があるドメインのみフィルタリング
     const allowedDomains = [];
@@ -39,6 +58,7 @@ async function registerContentScripts(domains) {
     
     if (allowedDomains.length === 0) {
       console.log('権限のあるドメインがありません');
+      isRegistering = false;
       return;
     }
     
@@ -46,7 +66,7 @@ async function registerContentScripts(domains) {
     const matches = allowedDomains.map(domain => `https://${domain}/*`);
     
     await chrome.scripting.registerContentScripts([{
-      id: 'webclass-modifier',
+      id: 'webclassModifier',
       matches: matches,
       js: ['js/content.js'],
       runAt: 'document_start',
@@ -56,6 +76,8 @@ async function registerContentScripts(domains) {
     console.log('Content scripts registered for:', allowedDomains);
   } catch (error) {
     console.error('Content script登録エラー:', error);
+  } finally {
+    isRegistering = false;
   }
 }
 
