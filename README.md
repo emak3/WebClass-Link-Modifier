@@ -1,9 +1,11 @@
-![Version](https://img.shields.io/badge/version-3.2.2-blue.svg)
+![Version](https://img.shields.io/badge/version-3.2.3-blue.svg)
 <div align="center">
 
 # <img width="80" height="80" alt="WebClass Link Modifier Icon" src="https://github.com/user-attachments/assets/8d15c02d-111f-467c-b5ca-457601ef1952" /> WebClass Link Modifier
 
 **WebClassサイトのリンク動作を自由にカスタマイズできるブラウザ拡張機能**
+
+<img width="700" height="440" alt="機能説明" src="https://github.com/user-attachments/assets/f382bf5f-a837-41f3-9b8d-b59d0e1e8a51" />
 
 </div>
 
