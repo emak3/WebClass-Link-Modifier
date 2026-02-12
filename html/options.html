@@ -40,12 +40,11 @@
 
         <div class="section">
             <div class="section-title">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-external-link-icon lucide-external-link">
-                    <path d="M15 3h6v6" />
-                    <path d="M10 14 21 3" />
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    class="lucide lucide-link-icon lucide-link">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                 </svg>
                 リンクの開き方（個別設定）
             </div>
@@ -703,6 +702,138 @@
                         <div class="input-group checkbox-group">
                             <label>
                                 <input type="checkbox" id="linkMaintainRatio" checked aria-label="授業リンクウィンドウの比率を維持">
+                                比率を維持
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 外部リンク -->
+            <div class="setting-group">
+                <div class="setting-label">
+                    <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                        <polyline points="15 3 21 3 21 9" />
+                        <line x1="10" x2="21" y1="14" y2="3" />
+                    </svg>
+                    <div class="setting-label-content">
+                        <span class="setting-label-text">外部リンク</span>
+                        <span class="setting-description">指定ドメイン以外のリンク（Google、Yahooなど）を押した時のタブを指定できます。</span>
+                    </div>
+                </div>
+                <div class="link-behavior-options">
+                    <label class="radio-option compact">
+                        <input type="radio" name="externalLinkBehavior" value="newTab" checked>
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="15" x2="15" y1="12" y2="18" />
+                                    <line x1="12" x2="18" y1="15" y2="15" />
+                                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                                </svg>
+                                別のタブ
+                            </div>
+                            <div class="option-description">新しいタブで開きます</div>
+                        </div>
+                    </label>
+
+                    <label class="radio-option compact">
+                        <input type="radio" name="externalLinkBehavior" value="newWindow">
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-app-window-icon lucide-app-window">
+                                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                                    <path d="M10 4v4" />
+                                    <path d="M2 8h20" />
+                                    <path d="M6 4v4" />
+                                </svg>
+                                サブウィンドウ
+                            </div>
+                            <div class="option-description">Full screen時は利用不可</div>
+                        </div>
+                    </label>
+
+                    <label class="radio-option compact">
+                        <input type="radio" name="externalLinkBehavior" value="sameTab">
+                        <div class="radio-indicator">
+                            <svg class="unchecked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <svg class="checked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">
+                                <svg class="option-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                                    <path d="M8 12h8" />
+                                    <path d="M12 8v8" />
+                                </svg>
+                                同じタブ
+                            </div>
+                            <div class="option-description">Clickしたタブで開きます</div>
+                        </div>
+                    </label>
+
+                </div>
+                <div class="window-size-settings" id="externalLinkWindowSize" style="display: none;">
+                    <div class="size-presets">
+                        <button class="preset-btn" data-ratio="16:9">16:9</button>
+                        <button class="preset-btn" data-ratio="4:3">4:3</button>
+                        <button class="preset-btn" data-ratio="1:1">1:1</button>
+                        <button class="preset-btn" data-ratio="custom">カスタム</button>
+                        <button class="reset-btn">初期値にリセット</button>
+                    </div>
+                    <div class="size-inputs">
+                        <div class="input-group">
+                            <label>幅 (px)</label>
+                            <input type="number" class="size-input" id="externalLinkWidth" min="100" max="10000"
+                                step="50" value="1200" aria-label="外部リンクウィンドウの幅">
+                        </div>
+                        <div class="input-group">
+                            <label>高さ (px)</label>
+                            <input type="number" class="size-input" id="externalLinkHeight" min="100" max="10000"
+                                step="50" value="900" aria-label="外部リンクウィンドウの高さ">
+                        </div>
+                        <div class="input-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="externalLinkMaintainRatio" checked
+                                    aria-label="外部リンクウィンドウの比率を維持">
                                 比率を維持
                             </label>
                         </div>

@@ -6,12 +6,14 @@ const DEFAULT_SETTINGS = {
     fileBehavior: 'newTab',
     webclassBehavior: 'sameTab',
     attachmentBehavior: 'newWindow',
+    externalLinkBehavior: 'newTab',  // 新規追加
     // ウィンドウサイズ設定
     mailWindowSize: { width: 800, height: 600, ratio: '4:3' },
     fileWindowSize: { width: 1200, height: 900, ratio: '4:3' },
     attachmentWindowSize: { width: 500, height: 500, ratio: '1:1' },
     linkWindowSize: { width: 800, height: 600, ratio: '4:3' },
-    webclassWindowSize: { width: 1600, height: 898, ratio: '16:9' }
+    webclassWindowSize: { width: 1600, height: 898, ratio: '16:9' },
+    externalLinkWindowSize: { width: 1200, height: 900, ratio: '4:3' }  // 新規追加
 };
 
 // ドメイン一覧を読み込む
@@ -25,8 +27,8 @@ function loadDomains() {
 // リンクの開き方設定を読み込む
 function loadLinkBehavior() {
     chrome.storage.sync.get([
-        'linkBehavior', 'mailBehavior', 'fileBehavior', 'webclassBehavior', 'attachmentBehavior',
-        'mailWindowSize', 'fileWindowSize', 'attachmentWindowSize', 'linkWindowSize', 'webclassWindowSize'
+        'linkBehavior', 'mailBehavior', 'fileBehavior', 'webclassBehavior', 'attachmentBehavior', 'externalLinkBehavior',
+        'mailWindowSize', 'fileWindowSize', 'attachmentWindowSize', 'linkWindowSize', 'webclassWindowSize', 'externalLinkWindowSize'
     ], function(result) {
         const settings = {
             linkBehavior: result.linkBehavior || DEFAULT_SETTINGS.linkBehavior,
@@ -34,11 +36,13 @@ function loadLinkBehavior() {
             fileBehavior: result.fileBehavior || DEFAULT_SETTINGS.fileBehavior,
             webclassBehavior: result.webclassBehavior || DEFAULT_SETTINGS.webclassBehavior,
             attachmentBehavior: result.attachmentBehavior || DEFAULT_SETTINGS.attachmentBehavior,
+            externalLinkBehavior: result.externalLinkBehavior || DEFAULT_SETTINGS.externalLinkBehavior,  // 新規追加
             mailWindowSize: result.mailWindowSize || DEFAULT_SETTINGS.mailWindowSize,
             fileWindowSize: result.fileWindowSize || DEFAULT_SETTINGS.fileWindowSize,
             attachmentWindowSize: result.attachmentWindowSize || DEFAULT_SETTINGS.attachmentWindowSize,
             linkWindowSize: result.linkWindowSize || DEFAULT_SETTINGS.linkWindowSize,
-            webclassWindowSize: result.webclassWindowSize || DEFAULT_SETTINGS.webclassWindowSize
+            webclassWindowSize: result.webclassWindowSize || DEFAULT_SETTINGS.webclassWindowSize,
+            externalLinkWindowSize: result.externalLinkWindowSize || DEFAULT_SETTINGS.externalLinkWindowSize  // 新規追加
         };
         
         // PDFファイルの「同じタブ」は許可しない
@@ -54,7 +58,7 @@ function loadLinkBehavior() {
         }
         
         // 各ラジオボタンを設定
-        ['linkBehavior', 'mailBehavior', 'fileBehavior', 'webclassBehavior', 'attachmentBehavior'].forEach(key => {
+        ['linkBehavior', 'mailBehavior', 'fileBehavior', 'webclassBehavior', 'attachmentBehavior', 'externalLinkBehavior'].forEach(key => {
             const radios = document.getElementsByName(key);
             for (let i = 0; i < radios.length; i++) {
                 if (radios[i].value === settings[key]) {
@@ -70,6 +74,7 @@ function loadLinkBehavior() {
         loadWindowSize('attachment', settings.attachmentWindowSize);
         loadWindowSize('link', settings.linkWindowSize);
         loadWindowSize('webclass', settings.webclassWindowSize);
+        loadWindowSize('externalLink', settings.externalLinkWindowSize);  // 新規追加
         
         // サブウィンドウが選択されている場合、サイズ設定を表示
         updateWindowSizeVisibility();
@@ -205,42 +210,28 @@ async function saveDomains() {
         fileBehavior: getRadioValue('fileBehavior'),
         webclassBehavior: getRadioValue('webclassBehavior'),
         attachmentBehavior: getRadioValue('attachmentBehavior'),
+        externalLinkBehavior: getRadioValue('externalLinkBehavior'),  // 新規追加
         mailWindowSize: getWindowSize('mail'),
         fileWindowSize: getWindowSize('file'),
         attachmentWindowSize: getWindowSize('attachment'),
         linkWindowSize: getWindowSize('link'),
-        webclassWindowSize: getWindowSize('webclass')
+        webclassWindowSize: getWindowSize('webclass'),
+        externalLinkWindowSize: getWindowSize('externalLink')  // 新規追加
     };
     
     // PDFファイルの「同じタブ」は許可しない
     if (settings.fileBehavior === 'sameTab') {
         settings.fileBehavior = 'newTab';
         showStatus('PDFファイルは同じタブで開けないため、別のタブで開く設定に変更されました。', 'info');
-        const radios = document.getElementsByName('fileBehavior');
-        for (let i = 0; i < radios.length; i++) {
-            if (radios[i].value === 'newTab') {
-                radios[i].checked = true;
-                break;
-            }
-        }
-        return;
     }
     
     // 添付資料の「同じタブ」も許可しない
     if (settings.attachmentBehavior === 'sameTab') {
         settings.attachmentBehavior = 'newWindow';
         showStatus('添付資料は同じタブで開けないため、サブウィンドウで開く設定に変更されました。', 'info');
-        const radios = document.getElementsByName('attachmentBehavior');
-        for (let i = 0; i < radios.length; i++) {
-            if (radios[i].value === 'newWindow') {
-                radios[i].checked = true;
-                break;
-            }
-        }
-        return;
     }
     
-    // 新しいドメインに対して権限を要求
+    // 新しいドメインが追加されている場合は権限を要求
     const newDomains = domains.filter(d => !DEFAULT_DOMAINS.includes(d));
     
     if (newDomains.length > 0) {
@@ -353,7 +344,7 @@ function maintainAspectRatio(changedField, prefix, previousWidth, previousHeight
 
 // サブウィンドウサイズ設定の表示/非表示を切り替え
 function updateWindowSizeVisibility() {
-    const types = ['mail', 'file', 'attachment', 'link', 'webclass'];
+    const types = ['mail', 'file', 'attachment', 'link', 'webclass', 'externalLink'];  // externalLinkを追加
     
     types.forEach(type => {
         const behaviorRadios = document.getElementsByName(`${type}Behavior`);
@@ -374,7 +365,7 @@ function updateWindowSizeVisibility() {
 
 // ウィンドウサイズ設定のイベントリスナーを設定
 function setupWindowSizeListeners() {
-    const types = ['mail', 'file', 'attachment', 'link', 'webclass'];
+    const types = ['mail', 'file', 'attachment', 'link', 'webclass', 'externalLink'];  // externalLinkを追加
     
     types.forEach(type => {
         const widthInput = document.getElementById(`${type}Width`);
