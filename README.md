@@ -11,6 +11,8 @@
 
 <img width="700" height="440" alt="機能説明" src="https://github.com/user-attachments/assets/f382bf5f-a837-41f3-9b8d-b59d0e1e8a51" />
 
+<img width="750" height="173" alt="もじ" src="https://github.com/user-attachments/assets/c6d9377d-4cb5-4399-b8b4-3886cc17222f" />
+
 </div>
 
 ---
