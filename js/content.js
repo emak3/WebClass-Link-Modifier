@@ -241,6 +241,52 @@ function initExtension() {
     }
   }
 
+  // onclick文字列から既知の関数呼び出しを安全に実行する
+  function executeOnclickSafely(onclickStr) {
+    const code = onclickStr.replace(/^javascript:\s*/, '').trim();
+
+    // callWebClass(lang) の呼び出しを検出
+    const callWebClassMatch = code.match(/callWebClass\(([^)]*)\)/);
+    if (callWebClassMatch) {
+      const lang = callWebClassMatch[1].replace(/['"]/g, '').trim();
+      if (typeof window.callWebClass === 'function') {
+        window.callWebClass(lang || undefined);
+      } else {
+        let url = '/webclass/login.php?auth_mode=SAML' + window.location.search;
+        if (lang === 'ENGLISH') url += '&language=ENGLISH';
+        openLink(url, 'webclass');
+      }
+      return true;
+    }
+
+    // callSmartphoneWebClass(lang) の呼び出しを検出
+    const callSmartMatch = code.match(/callSmartphoneWebClass\(([^)]*)\)/);
+    if (callSmartMatch) {
+      const lang = callSmartMatch[1].replace(/['"]/g, '').trim();
+      if (typeof window.callSmartphoneWebClass === 'function') {
+        window.callSmartphoneWebClass(lang || undefined);
+      } else {
+        let url = '/webclass/login.php' + window.location.search;
+        url += (window.location.search === '' ? '?' : '&') + 'mbl=1';
+        if (lang === 'ENGLISH') url += '&language=ENGLISH';
+        openLink(url, 'webclass');
+      }
+      return true;
+    }
+
+    // openWebClassWindow(url) の呼び出しを検出
+    const openWebClassMatch = code.match(/openWebClassWindow\(['"]([^'"]+)['"]\)/);
+    if (openWebClassMatch) {
+      openLink(openWebClassMatch[1], 'webclass');
+      return true;
+    }
+
+    // いずれにも一致しない場合はフォールバック
+    const url = '/webclass/login.php?auth_mode=SAML' + window.location.search;
+    openLink(url, 'webclass');
+    return false;
+  }
+
   function modifyLinks() {
     try {
       const links = document.querySelectorAll('a');
@@ -265,10 +311,9 @@ function initExtension() {
 
             if (originalOnclick) {
               try {
-                const code = originalOnclick.replace(/^javascript:\s*/, '').replace(/;\s*$/, '');
-                eval(code);
+                executeOnclickSafely(originalOnclick);
               } catch (error) {
-                console.error('onclick実行エラー:', error);
+                console.error('onclick処理エラー:', error);
                 // フォールバック
                 const url = '/webclass/login.php?auth_mode=SAML' + window.location.search;
                 openLink(url, 'webclass');
