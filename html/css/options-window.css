@@ -1,0 +1,108 @@
+/* ================================================================
+   options-window.css — Window size settings panel
+   ================================================================ */
+
+.wsp {
+  display: none;
+  margin-top: 12px;
+  padding: 13px 14px;
+  background: var(--bg-3);
+  border: 1px solid var(--sep);
+  border-radius: var(--r-md);
+}
+.wsp.show { display: block; }
+
+.wsp-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 11px;
+}
+
+/* Preset pills — neutral, no accent unless active */
+.btn-pill {
+  padding: 4px 10px;
+  background: var(--bg-4);
+  border: 1px solid transparent;
+  border-radius: 99px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--label-2);
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.btn-pill:hover { background: var(--fill-2); color: var(--label-1); }
+.btn-pill.active { background: var(--accent-muted); border-color: var(--accent); color: var(--accent); }
+
+.btn-pill-reset {
+  margin-left: auto;
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 99px;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--label-3);
+  cursor: pointer;
+  transition: color var(--t-fast);
+}
+.btn-pill-reset:hover { color: var(--red); }
+
+/* Fields row */
+.wsp-fields {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.wsp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wsp-field label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--label-3);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.wsp-input {
+  width: 90px; height: 30px;
+  padding: 0 9px;
+  background: var(--bg-2);
+  border: 1px solid var(--sep);
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--label-1);
+  transition: border-color var(--t-fast);
+}
+.wsp-input:focus { outline: none; border-color: var(--accent); }
+
+.wsp-check-field {
+  display: flex;
+  align-items: center;
+  padding-bottom: 3px;
+}
+.wsp-check-field label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-xs);
+  color: var(--label-2);
+  cursor: pointer;
+  user-select: none;
+}
+.wsp-check-field input[type="checkbox"] {
+  width: 13px; height: 13px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
