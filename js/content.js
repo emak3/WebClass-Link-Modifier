@@ -110,7 +110,16 @@ function initExtension() {
       }
 
       // WebClassログイン画面
+      // element がある場合は .buttonLabel に「»」から始まるテキストがある場合のみ処理
       if (url.includes('/webclass/login.php')) {
+        if (element) {
+          const labelEl = element.querySelector('.buttonLabel');
+          if (labelEl && labelEl.textContent.trim().startsWith('»')) {
+            return 'webclass';
+          }
+          return 'other';
+        }
+        // element なし（window.open 経由など）はそのまま処理
         return 'webclass';
       }
 
@@ -464,6 +473,30 @@ function initExtension() {
     }
   }
 
+  // ログインボタン（input#LoginBtn）の処理
+  // <input class="btn btn-primary" id="LoginBtn" type="submit" name="login" value="Login">
+  // <input class="btn btn-primary" id="LoginBtn" type="submit" name="login" value="ログイン">　etc...
+  function modifyLoginButtons() {
+    try {
+      const buttons = document.querySelectorAll(
+        'input#LoginBtn[type="submit"][name="login"]'
+      );
+      buttons.forEach(function (btn) {
+        if (btn.hasAttribute('data-modified')) return;
+        btn.setAttribute('data-modified', 'true');
+
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const form = btn.closest('form');
+          const url = form ? form.action : window.location.href;
+          openLink(url, 'webclass');
+        }, true);
+      });
+    } catch (error) {
+      console.error('ログインボタン修正エラー:', error);
+    }
+  }
 
   function overrideGlobalFunctions() {
     try {
@@ -626,6 +659,7 @@ function initExtension() {
       if (document.body) {
         modifyLinks();
         modifyForms();
+        modifyLoginButtons();
         setupObserver();
       } else {
         setTimeout(init, 10);
@@ -652,6 +686,7 @@ function initExtension() {
           if (shouldUpdate) {
             modifyLinks();
             modifyForms();
+            modifyLoginButtons();
           }
         } catch (error) {
           console.error('監視エラー:', error);
@@ -675,6 +710,7 @@ function initExtension() {
     if (document.readyState === 'interactive' || document.readyState === 'complete') {
       modifyLinks();
       modifyForms();
+      modifyLoginButtons();
       setupObserver();
     }
   };
@@ -683,6 +719,7 @@ function initExtension() {
     try {
       modifyLinks();
       modifyForms();
+      modifyLoginButtons();
       setupObserver();
     } catch (error) {
       console.error('DOMContentLoadedエラー:', error);
@@ -693,6 +730,7 @@ function initExtension() {
     try {
       modifyLinks();
       modifyForms();
+      modifyLoginButtons();
     } catch (error) {
       console.error('window.loadエラー:', error);
     }
