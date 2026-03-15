@@ -242,3 +242,28 @@
   letter-spacing: -0.01em;
 }
 .btn-primary:hover { opacity: 0.88; }
+
+/* ── Accordion trigger on sg-head ── */
+.sg-head[data-ac-trigger] {
+  cursor: pointer;
+  user-select: none;
+}
+.sg-head[data-ac-trigger]:hover { background: var(--fill-4); }
+
+.sg-chevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--label-3);
+  transition: transform var(--t-mid), color var(--t-fast);
+}
+.sg-card.is-open .sg-chevron {
+  transform: rotate(180deg);
+  color: var(--label-2);
+}
+
+/* Panel */
+.sg-card [data-ac-panel] {
+  height: 0;
+  overflow: hidden;
+  transition: height var(--t-slow);
+}

@@ -68,6 +68,11 @@ function updateWindowSizeVisibility() {
       if (r.checked && r.value === 'newWindow') show = true;
     });
     panel.classList.toggle('show', show);
+
+    /* display:none→block のレイアウト確定後に再計算 */
+    if (window.refreshAcItem) {
+      requestAnimationFrame(function () { refreshAcItem(panel); });
+    }
   });
 }
 

@@ -48,12 +48,7 @@ async function requestPermissionsForDomains(domains) {
 
 /** Collect form values and write to storage. */
 async function saveDomains() {
-  var inputs  = document.querySelectorAll('.domain-item .domain-input');
-  var domains = [];
-  inputs.forEach(function (input) {
-    var raw = input.value.trim().replace(/^https?:\/\//, '').replace(/\/$/, '');
-    if (raw) domains.push(raw);
-  });
+  var domains = getDomainsFromDOM();
 
   if (domains.length === 0) {
     showStatus('少なくとも1つのドメインを入力してください', 'error');
