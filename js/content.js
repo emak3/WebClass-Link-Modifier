@@ -10,6 +10,7 @@ let fileBehavior = 'newTab'; // PDFなどのファイル
 let webclassBehavior = 'sameTab'; // WebClassログイン画面
 let attachmentBehavior = 'newWindow'; // 添付資料リンク
 let externalLinkBehavior = 'newTab'; // 外部リンク
+let informationsBehavior = 'newTab'; // お知らせ
 
 // ウィンドウサイズ設定
 let mailWindowSize = { width: 800, height: 600 };
@@ -18,28 +19,33 @@ let attachmentWindowSize = { width: 500, height: 500 };
 let linkWindowSize = { width: 800, height: 600 }; // 授業リンク（course.php）専用
 let webclassWindowSize = { width: 1600, height: 898 };
 let externalLinkWindowSize = { width: 1200, height: 900 }; // 外部リンク
+let informationsWindowSize = { width: 1200, height: 900 }; // お知らせ
 
 chrome.storage.sync.get([
-  'domains', 'linkBehavior', 'mailBehavior', 'fileBehavior', 'webclassBehavior', 'attachmentBehavior', 'externalLinkBehavior',
-  'mailWindowSize', 'fileWindowSize', 'attachmentWindowSize', 'linkWindowSize', 'webclassWindowSize', 'externalLinkWindowSize'
+  'domains', 'linkBehavior', 'mailBehavior', 'fileBehavior', 'webclassBehavior',
+  'attachmentBehavior', 'externalLinkBehavior', 'informationsBehavior',
+  'mailWindowSize', 'fileWindowSize', 'attachmentWindowSize', 'linkWindowSize',
+  'webclassWindowSize', 'externalLinkWindowSize', 'informationsWindowSize'
 ], function (result) {
   const domains = result.domains || DEFAULT_DOMAINS;
   const currentHost = window.location.hostname;
   targetDomains = domains; // ドメインリストを保存
-  linkBehavior = result.linkBehavior || 'sameTab';
-  mailBehavior = result.mailBehavior || 'newWindow';
-  fileBehavior = result.fileBehavior || 'newTab';
-  webclassBehavior = result.webclassBehavior || 'sameTab';
-  attachmentBehavior = result.attachmentBehavior || 'newWindow';
+  linkBehavior         = result.linkBehavior         || 'sameTab';
+  mailBehavior         = result.mailBehavior         || 'newWindow';
+  fileBehavior         = result.fileBehavior         || 'newTab';
+  webclassBehavior     = result.webclassBehavior     || 'sameTab';
+  attachmentBehavior   = result.attachmentBehavior   || 'newWindow';
   externalLinkBehavior = result.externalLinkBehavior || 'newTab';
+  informationsBehavior = result.informationsBehavior || 'newTab';
 
   // ウィンドウサイズ設定を読み込む
-  mailWindowSize = result.mailWindowSize || { width: 800, height: 600 };
-  fileWindowSize = result.fileWindowSize || { width: 1200, height: 900 };
-  attachmentWindowSize = result.attachmentWindowSize || { width: 500, height: 500 };
-  linkWindowSize = result.linkWindowSize || { width: 800, height: 600 };
-  webclassWindowSize = result.webclassWindowSize || { width: 1600, height: 898 };
-  externalLinkWindowSize = result.externalLinkWindowSize || { width: 1200, height: 900 };
+  mailWindowSize         = result.mailWindowSize         || { width: 800,  height: 600  };
+  fileWindowSize         = result.fileWindowSize         || { width: 1200, height: 900  };
+  attachmentWindowSize   = result.attachmentWindowSize   || { width: 500,  height: 500  };
+  linkWindowSize         = result.linkWindowSize         || { width: 800,  height: 600  };
+  webclassWindowSize     = result.webclassWindowSize     || { width: 1600, height: 898  };
+  externalLinkWindowSize = result.externalLinkWindowSize || { width: 1200, height: 900  };
+  informationsWindowSize = result.informationsWindowSize || { width: 1200, height: 900  };
 
   isTargetDomain = domains.some(domain => currentHost.includes(domain));
 
@@ -88,8 +94,14 @@ function initExtension() {
     // URLベースの判定を先に行う
     if (url) {
       // 授業リンク（course.php）を最優先で判定
-      if (url.includes('course.php')) {
+      // course.php 単体、および course.php/.../login? 形式の両方に対応
+      if (/course\.php\/.+\/login/.test(url)) {
         return 'course';
+      }
+
+      // お知らせリンク（informations.php）
+      if (url.includes('informations.php/show?')) {
+        return 'information';
       }
 
       // 添付ファイルのダウンロードURL
@@ -209,9 +221,13 @@ function initExtension() {
         behavior = externalLinkBehavior;
         windowSize = externalLinkWindowSize;
         break;
-      case 'course':  // 授業リンク（course.php）専用
+      case 'course':  // 授業リンク（course.php / course.php/.../login?）
         behavior = linkBehavior;
         windowSize = linkWindowSize;
+        break;
+      case 'information':  // お知らせ（informations.php）
+        behavior = informationsBehavior;
+        windowSize = informationsWindowSize;
         break;
       default:
         // その他は何もしない
@@ -425,13 +441,14 @@ function initExtension() {
         }
 
         // リンクタイプに応じた動作を取得
-        const behavior = linkType === 'mail' ? mailBehavior :
-          linkType === 'file' ? fileBehavior :
-            linkType === 'attachment' ? attachmentBehavior :
-              linkType === 'webclass' ? webclassBehavior :
-                linkType === 'external' ? externalLinkBehavior :
-                  linkType === 'course' ? linkBehavior :
-                    null; // otherの場合
+        const behavior = linkType === 'mail'        ? mailBehavior        :
+                         linkType === 'file'        ? fileBehavior        :
+                         linkType === 'attachment'  ? attachmentBehavior  :
+                         linkType === 'webclass'    ? webclassBehavior    :
+                         linkType === 'external'    ? externalLinkBehavior :
+                         linkType === 'course'      ? linkBehavior        :
+                         linkType === 'information' ? informationsBehavior :
+                         null;
 
         // behaviorがnullの場合はスキップ
         if (behavior === null) {
@@ -472,26 +489,28 @@ function initExtension() {
             return originalWindowOpen.apply(this, arguments);
           }
 
-          let behavior = linkType === 'mail' ? mailBehavior :
-            linkType === 'file' ? fileBehavior :
-              linkType === 'attachment' ? attachmentBehavior :
-                linkType === 'webclass' ? webclassBehavior :
-                  linkType === 'external' ? externalLinkBehavior :
-                    linkType === 'course' ? linkBehavior :
-                      null;
+          let behavior = linkType === 'mail'        ? mailBehavior        :
+                         linkType === 'file'        ? fileBehavior        :
+                         linkType === 'attachment'  ? attachmentBehavior  :
+                         linkType === 'webclass'    ? webclassBehavior    :
+                         linkType === 'external'    ? externalLinkBehavior :
+                         linkType === 'course'      ? linkBehavior        :
+                         linkType === 'information' ? informationsBehavior :
+                         null;
 
           // behaviorがnullの場合は元のwindow.openを呼び出す
           if (behavior === null) {
             return originalWindowOpen.apply(this, arguments);
           }
 
-          let windowSize = linkType === 'mail' ? mailWindowSize :
-            linkType === 'file' ? fileWindowSize :
-              linkType === 'attachment' ? attachmentWindowSize :
-                linkType === 'webclass' ? webclassWindowSize :
-                  linkType === 'external' ? externalLinkWindowSize :
-                    linkType === 'course' ? linkWindowSize :
-                      null;
+          let windowSize = linkType === 'mail'        ? mailWindowSize        :
+                           linkType === 'file'        ? fileWindowSize        :
+                           linkType === 'attachment'  ? attachmentWindowSize  :
+                           linkType === 'webclass'    ? webclassWindowSize    :
+                           linkType === 'external'    ? externalLinkWindowSize :
+                           linkType === 'course'      ? linkWindowSize        :
+                           linkType === 'information' ? informationsWindowSize :
+                           null;
 
           // PDFファイルは同じタブで開けないように強制
           if (linkType === 'file' && behavior === 'sameTab') {
@@ -527,8 +546,6 @@ function initExtension() {
 
       // openMessageWindow関数を上書き
       if (typeof window.openMessageWindow === 'function') {
-        const originalOpenMessageWindow = window.openMessageWindow;
-
         window.openMessageWindow = function (url) {
           const linkType = getLinkType(url);
           openLink(url, linkType);
@@ -538,8 +555,6 @@ function initExtension() {
 
       // filedownload関数を上書き
       if (typeof window.filedownload === 'function') {
-        const originalFiledownload = window.filedownload;
-
         window.filedownload = function (url) {
           openLink(url, 'attachment');
           return false;
@@ -553,18 +568,13 @@ function initExtension() {
       }
 
       if (typeof window.openWebClassWindow === 'function') {
-        const originalOpenWebClassWindow = window.openWebClassWindow;
-
         window.openWebClassWindow = function (url) {
           window.location.href = url;
           return window;
         };
       }
 
-
       if (typeof window.callWebClass === 'function') {
-        const originalCallWebClass = window.callWebClass;
-
         window.callWebClass = function (lang) {
           var url = "/webclass/login.php?auth_mode=SAML" + window.location.search;
           if (lang == 'ENGLISH') {
@@ -581,10 +591,7 @@ function initExtension() {
         };
       }
 
-
       if (typeof window.callSmartphoneWebClass === 'function') {
-        const originalCallSmartphoneWebClass = window.callSmartphoneWebClass;
-
         window.callSmartphoneWebClass = function (lang) {
           var url = "/webclass/login.php" + window.location.search;
           if (window.location.search === '') {
@@ -615,7 +622,6 @@ function initExtension() {
   function init() {
     try {
       overrideGlobalFunctions();
-
 
       if (document.body) {
         modifyLinks();
@@ -652,7 +658,6 @@ function initExtension() {
         }
       });
 
-
       if (document.body) {
         observer.observe(document.body, {
           childList: true,
@@ -666,7 +671,6 @@ function initExtension() {
 
   init();
 
-
   document.onreadystatechange = function () {
     if (document.readyState === 'interactive' || document.readyState === 'complete') {
       modifyLinks();
@@ -674,7 +678,6 @@ function initExtension() {
       setupObserver();
     }
   };
-
 
   document.addEventListener('DOMContentLoaded', function () {
     try {
@@ -685,7 +688,6 @@ function initExtension() {
       console.error('DOMContentLoadedエラー:', error);
     }
   });
-
 
   window.addEventListener('load', function () {
     try {
