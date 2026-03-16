@@ -1,9 +1,9 @@
-![Version](https://img.shields.io/badge/version-3.3.0-blue.svg)
+![Version](https://img.shields.io/badge/version-3.4.1-blue.svg)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome-Web_Store-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/webclass-link-modifier/hfplabckhfelpkdknbjhaoddmnojgici)
 
 <div align="center">
 
-# <img width="80" height="80" alt="WebClass Link Modifier Icon" src="https://github.com/user-attachments/assets/8d15c02d-111f-467c-b5ca-457601ef1952" /> WebClass Link Modifier
+# <img width="40" height="40" alt="WebClass Link Modifier Icon" src="icons/icon1024.png" /> WebClass Link Modifier
 
 **WebClassサイトのリンク動作を自由にカスタマイズできるブラウザ拡張機能**
 
@@ -122,6 +122,8 @@ edge://extensions/
 
 ### ![Mouse Pointer Click](https://api.iconify.design/lucide/mouse-pointer-click.svg?color=%234a90e2&width=20&height=20) オプション画面を開く
 
+_**※WebClassのコースリストに表示されているアイコンを押しても設定画面に移動できます。**_
+
 拡張機能アイコンをクリックし、「拡張機能オプション」を選択
 
 <img width="550" alt="オプション画面の開き方" src="https://github.com/user-attachments/assets/83124f2f-2307-44b4-bb5d-f45ca43d844b" />
@@ -130,13 +132,8 @@ edge://extensions/
 
 使用するWebClassサイトのドメインを設定します
 
-**デフォルトドメイン:**
-```
-lms.salesio-sp.ac.jp
-```
-
-**他の例:**
-- `lms.example.ac.jp`
+**ドメイン設定例:**
+- `xxx.example.ac.jp`
 - `webclass.university.ac.jp`
 
 ### ![Link](https://api.iconify.design/lucide/link.svg?color=%234a90e2&width=20&height=20) リンクの動作を設定
