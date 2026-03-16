@@ -30,22 +30,22 @@ chrome.storage.sync.get([
   const domains = result.domains || DEFAULT_DOMAINS;
   const currentHost = window.location.hostname;
   targetDomains = domains; // ドメインリストを保存
-  linkBehavior         = result.linkBehavior         || 'sameTab';
-  mailBehavior         = result.mailBehavior         || 'newWindow';
-  fileBehavior         = result.fileBehavior         || 'newTab';
-  webclassBehavior     = result.webclassBehavior     || 'sameTab';
-  attachmentBehavior   = result.attachmentBehavior   || 'newWindow';
+  linkBehavior = result.linkBehavior || 'sameTab';
+  mailBehavior = result.mailBehavior || 'newWindow';
+  fileBehavior = result.fileBehavior || 'newTab';
+  webclassBehavior = result.webclassBehavior || 'sameTab';
+  attachmentBehavior = result.attachmentBehavior || 'newWindow';
   externalLinkBehavior = result.externalLinkBehavior || 'newTab';
   informationsBehavior = result.informationsBehavior || 'newTab';
 
   // ウィンドウサイズ設定を読み込む
-  mailWindowSize         = result.mailWindowSize         || { width: 800,  height: 600  };
-  fileWindowSize         = result.fileWindowSize         || { width: 1200, height: 900  };
-  attachmentWindowSize   = result.attachmentWindowSize   || { width: 500,  height: 500  };
-  linkWindowSize         = result.linkWindowSize         || { width: 800,  height: 600  };
-  webclassWindowSize     = result.webclassWindowSize     || { width: 1600, height: 898  };
-  externalLinkWindowSize = result.externalLinkWindowSize || { width: 1200, height: 900  };
-  informationsWindowSize = result.informationsWindowSize || { width: 1200, height: 900  };
+  mailWindowSize = result.mailWindowSize || { width: 800, height: 600 };
+  fileWindowSize = result.fileWindowSize || { width: 1200, height: 900 };
+  attachmentWindowSize = result.attachmentWindowSize || { width: 500, height: 500 };
+  linkWindowSize = result.linkWindowSize || { width: 800, height: 600 };
+  webclassWindowSize = result.webclassWindowSize || { width: 1600, height: 898 };
+  externalLinkWindowSize = result.externalLinkWindowSize || { width: 1200, height: 900 };
+  informationsWindowSize = result.informationsWindowSize || { width: 1200, height: 900 };
 
   isTargetDomain = domains.some(domain => currentHost.includes(domain));
 
@@ -100,7 +100,9 @@ function initExtension() {
       }
 
       // お知らせリンク（informations.php）
-      if (url.includes('informations.php/show?')) {
+      const parsedUrl = new URL(url);
+
+      if (!(window.location.href.includes('informations.php') && url.includes('informations.php')) && parsedUrl.pathname.includes('informations.php') && !parsedUrl.searchParams.has('page') && parsedUrl.searchParams.get('action') !== 'show' && (parsedUrl.search || parsedUrl.pathname.includes('/show'))) {
         return 'information';
       }
 
@@ -124,7 +126,7 @@ function initExtension() {
       }
 
       // メールリンク判定
-      if (url.includes('msg_editor.php')) {
+      if (!(window.location.href.includes('msg_editor.php') && url.includes('msg_editor.php')) && url.includes('msg_editor.php')) {
         return 'mail';
       }
 
@@ -450,14 +452,14 @@ function initExtension() {
         }
 
         // リンクタイプに応じた動作を取得
-        const behavior = linkType === 'mail'        ? mailBehavior        :
-                         linkType === 'file'        ? fileBehavior        :
-                         linkType === 'attachment'  ? attachmentBehavior  :
-                         linkType === 'webclass'    ? webclassBehavior    :
-                         linkType === 'external'    ? externalLinkBehavior :
-                         linkType === 'course'      ? linkBehavior        :
-                         linkType === 'information' ? informationsBehavior :
-                         null;
+        const behavior = linkType === 'mail' ? mailBehavior :
+          linkType === 'file' ? fileBehavior :
+            linkType === 'attachment' ? attachmentBehavior :
+              linkType === 'webclass' ? webclassBehavior :
+                linkType === 'external' ? externalLinkBehavior :
+                  linkType === 'course' ? linkBehavior :
+                    linkType === 'information' ? informationsBehavior :
+                      null;
 
         // behaviorがnullの場合はスキップ
         if (behavior === null) {
@@ -522,28 +524,28 @@ function initExtension() {
             return originalWindowOpen.apply(this, arguments);
           }
 
-          let behavior = linkType === 'mail'        ? mailBehavior        :
-                         linkType === 'file'        ? fileBehavior        :
-                         linkType === 'attachment'  ? attachmentBehavior  :
-                         linkType === 'webclass'    ? webclassBehavior    :
-                         linkType === 'external'    ? externalLinkBehavior :
-                         linkType === 'course'      ? linkBehavior        :
-                         linkType === 'information' ? informationsBehavior :
-                         null;
+          let behavior = linkType === 'mail' ? mailBehavior :
+            linkType === 'file' ? fileBehavior :
+              linkType === 'attachment' ? attachmentBehavior :
+                linkType === 'webclass' ? webclassBehavior :
+                  linkType === 'external' ? externalLinkBehavior :
+                    linkType === 'course' ? linkBehavior :
+                      linkType === 'information' ? informationsBehavior :
+                        null;
 
           // behaviorがnullの場合は元のwindow.openを呼び出す
           if (behavior === null) {
             return originalWindowOpen.apply(this, arguments);
           }
 
-          let windowSize = linkType === 'mail'        ? mailWindowSize        :
-                           linkType === 'file'        ? fileWindowSize        :
-                           linkType === 'attachment'  ? attachmentWindowSize  :
-                           linkType === 'webclass'    ? webclassWindowSize    :
-                           linkType === 'external'    ? externalLinkWindowSize :
-                           linkType === 'course'      ? linkWindowSize        :
-                           linkType === 'information' ? informationsWindowSize :
-                           null;
+          let windowSize = linkType === 'mail' ? mailWindowSize :
+            linkType === 'file' ? fileWindowSize :
+              linkType === 'attachment' ? attachmentWindowSize :
+                linkType === 'webclass' ? webclassWindowSize :
+                  linkType === 'external' ? externalLinkWindowSize :
+                    linkType === 'course' ? linkWindowSize :
+                      linkType === 'information' ? informationsWindowSize :
+                        null;
 
           // PDFファイルは同じタブで開けないように強制
           if (linkType === 'file' && behavior === 'sameTab') {
