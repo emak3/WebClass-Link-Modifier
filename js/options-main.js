@@ -4,13 +4,19 @@
    ================================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
+  // content.js の設定ボタン注入と同じ方法でアイコンを解決
+  var _rt = (typeof browser !== 'undefined' && browser && browser.runtime)
+    ? browser.runtime : chrome.runtime;
+  var brandImg = document.getElementById('opts-brand-img');
+  if (brandImg) brandImg.src = _rt.getURL('icons/icon1024.png');
+
   loadDomains();
   loadLinkBehavior();
   setupWindowSizeListeners();
 
-  var addBtn  = document.getElementById('addDomainBtn');
+  var addBtn = document.getElementById('addDomainBtn');
   var saveBtn = document.getElementById('saveBtn');
 
-  if (addBtn)  addBtn.addEventListener('click', addDomain);
+  if (addBtn) addBtn.addEventListener('click', addDomain);
   if (saveBtn) saveBtn.addEventListener('click', saveDomains);
 });
