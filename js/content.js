@@ -375,7 +375,7 @@ function initExtension() {
       // Firefox のみ browser.runtime が必要なためフォールバックを用意する。
       const _rt = (typeof browser !== 'undefined' && browser && browser.runtime)
         ? browser.runtime : chrome.runtime;
-      img.src = _rt.getURL('icons/icon1080.png');
+      img.src = _rt.getURL('icons/icon1024.png');
       img.alt = 'WebClass Link Modifier';
       btn.appendChild(img);
 

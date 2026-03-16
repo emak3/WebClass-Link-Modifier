@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "WebClass Link Modifier",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "description": "WebClassサイトのリンクを設定したドメインで管理し、リンクの開き方を個別にカスタマイズできます",
   "permissions": [
     "scripting",
@@ -37,7 +37,8 @@
   },
   "icons": {
     "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "128": "icons/icon128.png",
+    "1024": "icons/icon1024.png"
   },
   "web_accessible_resources": [
     {
