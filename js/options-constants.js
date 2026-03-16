@@ -1,47 +1,33 @@
 /* ================================================================
-   options-constants.js — Shared defaults
+   options-constants.js — WC_CONFIG から導出する定数群
+   初期値の編集は js/config.js で行ってください。
    ================================================================ */
-/* global scope — loaded first */
+/* depends on: config.js (must be loaded first) */
 
-var DEFAULT_DOMAINS = ['lms.salesio-sp.ac.jp'];
+// ── 後方互換エイリアス ──────────────────────────────────────
+var DEFAULT_DOMAINS   = WC_CONFIG.defaults.domains.slice();
+var DEFAULT_SETTINGS  = (function () {
+  var s = {};
+  // behavior キーをそのままコピー
+  Object.keys(WC_CONFIG.defaults.behaviors).forEach(function (k) {
+    s[k] = WC_CONFIG.defaults.behaviors[k];
+  });
+  // windowSize は "<prefix>WindowSize" のキー名に変換して格納
+  Object.keys(WC_CONFIG.defaults.windowSizes).forEach(function (prefix) {
+    s[prefix + 'WindowSize'] = WC_CONFIG.defaults.windowSizes[prefix];
+  });
+  return s;
+}());
 
-var DEFAULT_SETTINGS = {
-  linkBehavior:            'sameTab',
-  mailBehavior:            'newWindow',
-  fileBehavior:            'newTab',
-  webclassBehavior:        'sameTab',
-  attachmentBehavior:      'newWindow',
-  externalLinkBehavior:    'newTab',
-  informationsBehavior:    'newTab',
+// オプションページが behavior ラジオを操作するためのキー一覧
+var BEHAVIOR_KEYS = Object.keys(WC_CONFIG.defaults.behaviors);
 
-  mailWindowSize:            { width: 800,  height: 600, ratio: '4:3'  },
-  fileWindowSize:            { width: 1200, height: 900, ratio: '4:3'  },
-  attachmentWindowSize:      { width: 500,  height: 500, ratio: '1:1'  },
-  linkWindowSize:            { width: 800,  height: 600, ratio: '4:3'  },
-  webclassWindowSize:        { width: 1600, height: 898, ratio: '16:9' },
-  externalLinkWindowSize:    { width: 1200, height: 900, ratio: '4:3'  },
-  informationsWindowSize:    { width: 1200, height: 900, ratio: '4:3'  },
-};
+// ウィンドウサイズ設定のプレフィックス一覧
+var WS_PREFIXES = Object.keys(WC_CONFIG.defaults.windowSizes);
 
-/* Behavior keys for iteration */
-var BEHAVIOR_KEYS = [
-  'linkBehavior', 'mailBehavior', 'fileBehavior',
-  'webclassBehavior', 'attachmentBehavior', 'externalLinkBehavior',
-  'informationsBehavior',
-];
-
-/* Window-size prefixes (matches HTML element id prefix) */
-var WS_PREFIXES = [
-  'mail', 'file', 'attachment', 'link', 'webclass', 'externalLink', 'informations',
-];
-
-/* Prefix → storage key */
-var WS_KEY_MAP = {
-  mail:         'mailWindowSize',
-  file:         'fileWindowSize',
-  attachment:   'attachmentWindowSize',
-  link:         'linkWindowSize',
-  webclass:     'webclassWindowSize',
-  externalLink: 'externalLinkWindowSize',
-  informations: 'informationsWindowSize',
-};
+// prefix → storage キー名のマップ（例: 'mail' → 'mailWindowSize'）
+var WS_KEY_MAP = (function () {
+  var m = {};
+  WS_PREFIXES.forEach(function (p) { m[p] = p + 'WindowSize'; });
+  return m;
+}());

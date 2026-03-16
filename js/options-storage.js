@@ -14,11 +14,15 @@ function loadLinkBehavior() {
     var s = {};
     allKeys.forEach(function (k) { s[k] = result[k] || DEFAULT_SETTINGS[k]; });
 
-    /* Sanitize impossible states */
-    if (s.fileBehavior === 'sameTab')       s.fileBehavior = 'newTab';
-    if (s.attachmentBehavior === 'sameTab') s.attachmentBehavior = 'newWindow';
+    /* 制限チェック（WC_CONFIG.restrictions に従って禁止値を差し替える） */
+    Object.keys(WC_CONFIG.restrictions).forEach(function (behaviorKey) {
+      var r = WC_CONFIG.restrictions[behaviorKey];
+      if (r.forbidden.indexOf(s[behaviorKey]) !== -1) {
+        s[behaviorKey] = r.fallback;
+      }
+    });
 
-    /* Apply radio buttons */
+    /* ラジオボタンに反映 */
     BEHAVIOR_KEYS.forEach(function (key) {
       var radios = document.getElementsByName(key);
       Array.prototype.forEach.call(radios, function (r) {
@@ -26,7 +30,7 @@ function loadLinkBehavior() {
       });
     });
 
-    /* Apply window sizes */
+    /* ウィンドウサイズに反映 */
     WS_PREFIXES.forEach(function (prefix) {
       loadWindowSize(prefix, s[WS_KEY_MAP[prefix]]);
     });
@@ -63,34 +67,31 @@ async function saveDomains() {
     return DEFAULT_SETTINGS[name];
   }
 
-  var fileBehavior   = getRadio('fileBehavior');
-  var attachBehavior = getRadio('attachmentBehavior');
+  /* BEHAVIOR_KEYS からすべての behavior を収集（キーの漏れが起きない） */
+  var settings = { domains: domains };
+  BEHAVIOR_KEYS.forEach(function (key) {
+    settings[key] = getRadio(key);
+  });
 
-  if (fileBehavior === 'sameTab') {
-    fileBehavior = 'newTab';
-    showStatus('PDFファイルは同じタブで開けないため、別のタブに変更されました。', 'info');
-  }
-  if (attachBehavior === 'sameTab') {
-    attachBehavior = 'newWindow';
-    showStatus('添付資料は同じタブで開けないため、サブウィンドウに変更されました。', 'info');
-  }
+  /* 制限チェック（WC_CONFIG.restrictions に従って禁止値を差し替え、ユーザーに通知） */
+  Object.keys(WC_CONFIG.restrictions).forEach(function (behaviorKey) {
+    var r = WC_CONFIG.restrictions[behaviorKey];
+    if (r.forbidden.indexOf(settings[behaviorKey]) !== -1) {
+      settings[behaviorKey] = r.fallback;
+      /* 差し替えが発生したときだけ通知 */
+      showStatus(behaviorKey + ' の設定が利用できないため、自動的に変更されました。', 'info');
+    }
+  });
 
-  var settings = {
-    domains:              domains,
-    linkBehavior:         getRadio('linkBehavior'),
-    mailBehavior:         getRadio('mailBehavior'),
-    fileBehavior:         fileBehavior,
-    webclassBehavior:     getRadio('webclassBehavior'),
-    attachmentBehavior:   attachBehavior,
-    externalLinkBehavior: getRadio('externalLinkBehavior'),
-  };
-
+  /* ウィンドウサイズを収集 */
   WS_PREFIXES.forEach(function (prefix) {
     settings[WS_KEY_MAP[prefix]] = getWindowSizeData(prefix);
   });
 
-  /* Request permissions for new domains */
-  var newDomains = domains.filter(function (d) { return !DEFAULT_DOMAINS.includes(d); });
+  /* 新規ドメインの権限リクエスト */
+  var newDomains = domains.filter(function (d) {
+    return DEFAULT_DOMAINS.indexOf(d) === -1;
+  });
   if (newDomains.length > 0) {
     showStatus('新しいドメインへのアクセス権限を要求しています...', 'info');
     var granted = await requestPermissionsForDomains(domains);

@@ -1,197 +1,156 @@
-// デフォルトのドメイン
-const DEFAULT_DOMAINS = ['lms.salesio-sp.ac.jp'];
+/* ================================================================
+   background.js — Service worker
+   初期値の編集は js/config.js で行ってください。
+   ================================================================ */
+importScripts('config.js');
 
-// ドメインリストを取得
+// ── ドメイン取得 ─────────────────────────────────────────────
 function getDomains(callback) {
   chrome.storage.sync.get(['domains'], function (result) {
-    const domains = result.domains || DEFAULT_DOMAINS;
-    callback(domains);
+    callback(result.domains || WC_CONFIG.defaults.domains.slice());
   });
 }
 
-// URLフィルターを生成
+// ── URLフィルター生成 ─────────────────────────────────────────
 function generateUrlFilters(domains) {
-  const filters = [];
-  domains.forEach(domain => {
-    filters.push({ hostContains: domain });
-  });
-  return filters;
+  return domains.map(function (domain) { return { hostContains: domain }; });
 }
 
-// content scriptを動的に登録
-let isRegistering = false; // 同時実行を防ぐフラグ
+// ── Content script 動的登録 ──────────────────────────────────
+let isRegistering = false;
 
 async function registerContentScripts(domains) {
-  // 既に登録処理中の場合は処理をスキップ
-  if (isRegistering) {
-    console.log('既に登録処理中です');
-    return;
-  }
-
+  if (isRegistering) { console.log('既に登録処理中です'); return; }
   isRegistering = true;
 
   try {
-    // すべての動的content scriptを削除
     try {
       const scripts = await chrome.scripting.getRegisteredContentScripts();
-      const ids = scripts.map(script => script.id);
+      const ids = scripts.map(s => s.id);
       if (ids.length > 0) {
-        await chrome.scripting.unregisterContentScripts({ ids: ids });
+        await chrome.scripting.unregisterContentScripts({ ids });
         console.log('削除されたスクリプト:', ids);
       }
     } catch (e) {
-      console.log('既存のcontent scriptはありません:', e.message);
+      console.log('既存の content script はありません:', e.message);
     }
 
-    // 権限があるドメインのみフィルタリング
     const allowedDomains = [];
-
     for (const domain of domains) {
-      const hasPermission = await chrome.permissions.contains({
-        origins: [`https://${domain}/*`]
-      });
-
-      if (hasPermission) {
-        allowedDomains.push(domain);
-      }
+      const ok = await chrome.permissions.contains({ origins: [`https://${domain}/*`] });
+      if (ok) allowedDomains.push(domain);
     }
 
     if (allowedDomains.length === 0) {
       console.log('権限のあるドメインがありません');
-      isRegistering = false;
       return;
     }
 
-    // 新しいcontent scriptを登録
-    const matches = allowedDomains.map(domain => `https://${domain}/*`);
-
+    const matches = allowedDomains.map(d => `https://${d}/*`);
     await chrome.scripting.registerContentScripts([{
       id: 'webclassModifier',
-      matches: matches,
-      js: ['js/content.js'],
+      matches,
+      // config.js を content.js より先にロードする
+      js: ['js/config.js', 'js/content.js'],
       runAt: 'document_start',
-      allFrames: true
+      allFrames: true,
     }]);
 
     console.log('Content scripts registered for:', allowedDomains);
   } catch (error) {
-    console.error('Content script登録エラー:', error);
+    console.error('Content script 登録エラー:', error);
   } finally {
     isRegistering = false;
   }
 }
 
-// リスナーを設定
+// ── ナビゲーションリスナー ────────────────────────────────────
+function onCompletedListener(details) {
+  try {
+    if (details.frameId === 0) console.log('Page completed:', details.url);
+  } catch (e) { console.error('onCompleted エラー:', e); }
+}
+
+function onBeforeNavigateListener(details) {
+  try {
+    getDomains(function (domains) {
+      if (domains.some(d => details.url.includes(d))) {
+        console.log('ナビゲーション検出:', details.url);
+      }
+    });
+  } catch (e) { console.error('onBeforeNavigate エラー:', e); }
+}
+
 function setupListeners() {
-  // 既存のリスナーを削除
-  if (chrome.webNavigation.onCompleted.hasListener(onCompletedListener)) {
+  if (chrome.webNavigation.onCompleted.hasListener(onCompletedListener))
     chrome.webNavigation.onCompleted.removeListener(onCompletedListener);
-  }
-  if (chrome.webNavigation.onBeforeNavigate.hasListener(onBeforeNavigateListener)) {
+  if (chrome.webNavigation.onBeforeNavigate.hasListener(onBeforeNavigateListener))
     chrome.webNavigation.onBeforeNavigate.removeListener(onBeforeNavigateListener);
-  }
 
-  // ドメインを取得してリスナーを追加
   getDomains(function (domains) {
-    const urlFilters = generateUrlFilters(domains);
-
     try {
-      chrome.webNavigation.onCompleted.addListener(
-        onCompletedListener,
-        { url: urlFilters }
-      );
-    } catch (error) {
-      console.error('onCompletedリスナー設定エラー:', error);
-    }
-
+      chrome.webNavigation.onCompleted.addListener(onCompletedListener,
+        { url: generateUrlFilters(domains) });
+    } catch (e) { console.error('onCompleted リスナー設定エラー:', e); }
     try {
       chrome.webNavigation.onBeforeNavigate.addListener(onBeforeNavigateListener);
-    } catch (error) {
-      console.error('onBeforeNavigateリスナー設定エラー:', error);
-    }
-
-    // content scriptも再登録
+    } catch (e) { console.error('onBeforeNavigate リスナー設定エラー:', e); }
     registerContentScripts(domains);
   });
 }
 
-// onCompletedリスナー
-function onCompletedListener(details) {
-  try {
-    if (details.frameId === 0) {
-      console.log('Page completed:', details.url);
-    }
-  } catch (error) {
-    console.error('onCompletedエラー:', error);
-  }
-}
-
-// onBeforeNavigateリスナー
-function onBeforeNavigateListener(details) {
-  try {
-    getDomains(function (domains) {
-      const matchesDomain = domains.some(domain => details.url.includes(domain));
-      if (matchesDomain) {
-        console.log('ナビゲーション検出: ' + details.url);
-      }
-    });
-  } catch (error) {
-    console.error('onBeforeNavigateエラー:', error);
-  }
-}
-
-// 初期化
+// ── 初期化 ───────────────────────────────────────────────────
 setupListeners();
 
-// オプション画面からのメッセージを受信
+// ── メッセージ受信 ────────────────────────────────────────────
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action === 'updatePermissions') {
-    // リスナーを再設定
     setupListeners();
+    sendResponse({ success: true });
+  }
+
+  // コンテンツスクリプトからの設定ページ開くリクエスト。
+  // window.open で chrome-extension:// URL を開くと Edge の SmartScreen に
+  // ブロックされるため、バックグラウンドから openOptionsPage() を呼ぶ。
+  if (request.action === 'openOptionsPage') {
+    chrome.runtime.openOptionsPage();
     sendResponse({ success: true });
   }
 });
 
-// 拡張機能インストール時にデフォルト値を設定
+// ── インストール時のデフォルト設定 ────────────────────────────
+// WC_CONFIG.defaults から自動生成するため、追加・変更は config.js のみを編集すれば OK
 chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.sync.get([
-    'domains', 'linkBehavior', 'mailBehavior', 'fileBehavior', 'webclassBehavior',
-    'attachmentBehavior', 'externalLinkBehavior', 'informationsBehavior',
-    'mailWindowSize', 'fileWindowSize', 'attachmentWindowSize', 'linkWindowSize',
-    'webclassWindowSize', 'externalLinkWindowSize', 'informationsWindowSize'
-  ], function (result) {
-    const updates = {};
-    if (!result.domains) updates.domains = DEFAULT_DOMAINS;
-    if (!result.linkBehavior) updates.linkBehavior = 'sameTab';
-    if (!result.mailBehavior) updates.mailBehavior = 'newWindow';
-    if (!result.fileBehavior) updates.fileBehavior = 'newTab';
-    if (!result.webclassBehavior) updates.webclassBehavior = 'sameTab';
-    if (!result.attachmentBehavior) updates.attachmentBehavior = 'newWindow';
-    if (!result.externalLinkBehavior) updates.externalLinkBehavior = 'newTab';
-    if (!result.informationsBehavior) updates.informationsBehavior = 'newTab';
+  var allKeys = Object.keys(WC_CONFIG.defaults.behaviors)
+    .concat(Object.keys(WC_CONFIG.defaults.windowSizes).map(function (p) { return p + 'WindowSize'; }))
+    .concat(['domains']);
 
-    if (!result.mailWindowSize) updates.mailWindowSize = { width: 800, height: 600, ratio: '4:3' };
-    if (!result.fileWindowSize) updates.fileWindowSize = { width: 1200, height: 900, ratio: '4:3' };
-    if (!result.attachmentWindowSize) updates.attachmentWindowSize = { width: 500, height: 500, ratio: '1:1' };
-    if (!result.linkWindowSize) updates.linkWindowSize = { width: 800, height: 600, ratio: '4:3' };
-    if (!result.webclassWindowSize) updates.webclassWindowSize = { width: 1600, height: 898, ratio: '16:9' };
-    if (!result.externalLinkWindowSize) updates.externalLinkWindowSize = { width: 1200, height: 900, ratio: '4:3' };
-    if (!result.informationsWindowSize) updates.informationsWindowSize = { width: 1200, height: 900, ratio: '4:3' };
+  chrome.storage.sync.get(allKeys, function (result) {
+    var updates = {};
 
-    if (Object.keys(updates).length > 0) {
-      chrome.storage.sync.set(updates);
+    if (!result.domains) {
+      updates.domains = WC_CONFIG.defaults.domains.slice();
     }
+    Object.keys(WC_CONFIG.defaults.behaviors).forEach(function (key) {
+      if (!result[key]) updates[key] = WC_CONFIG.defaults.behaviors[key];
+    });
+    Object.keys(WC_CONFIG.defaults.windowSizes).forEach(function (prefix) {
+      var key = prefix + 'WindowSize';
+      if (!result[key]) updates[key] = WC_CONFIG.defaults.windowSizes[prefix];
+    });
+
+    if (Object.keys(updates).length > 0) chrome.storage.sync.set(updates);
   });
+
   setupListeners();
 });
 
-// 権限変更を監視
-chrome.permissions.onAdded.addListener(function (permissions) {
-  console.log('権限が追加されました:', permissions);
+// ── 権限変更の監視 ────────────────────────────────────────────
+chrome.permissions.onAdded.addListener(function (p) {
+  console.log('権限追加:', p);
   setupListeners();
 });
-
-chrome.permissions.onRemoved.addListener(function (permissions) {
-  console.log('権限が削除されました:', permissions);
+chrome.permissions.onRemoved.addListener(function (p) {
+  console.log('権限削除:', p);
   setupListeners();
 });
