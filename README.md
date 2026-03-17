@@ -3,7 +3,7 @@
 
 <div align="center">
 
-# <img width="40" height="40" alt="WebClass Link Modifier Icon" src="icons/icon1024.png" /> WebClass Link Modifier
+# <img width="40" height="40" alt="WebClass Link Modifier Icon" src="extension/icons/icon1024.png" /> WebClass Link Modifier
 
 **WebClassサイトのリンク動作を自由にカスタマイズできるブラウザ拡張機能**
 
