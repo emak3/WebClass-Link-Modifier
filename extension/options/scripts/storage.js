@@ -2,7 +2,7 @@
    options-storage.js — Chrome storage read/write operations
    ================================================================ */
 /* depends on: options-constants.js, options-ui.js, options-domains.js,
-               options-window-size.js */
+               options-windowSize.js */
 
 /** Load all behavior settings from storage and apply to the form. */
 function loadLinkBehavior() {

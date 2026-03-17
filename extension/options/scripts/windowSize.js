@@ -1,5 +1,5 @@
 /* ================================================================
-   options-window-size.js — Window size settings UI
+   options-windowSize.js — Window size settings UI
    ================================================================ */
 /* depends on: options-constants.js */
 
@@ -57,7 +57,7 @@ function maintainAspectRatio(changedField, prefix, prevW, prevH) {
   }
 }
 
-/** Show/hide each window-size panel based on the selected radio. */
+/** Show/hide each windowSize panel based on the selected radio. */
 function updateWindowSizeVisibility() {
   WS_PREFIXES.forEach(function (prefix) {
     var panel  = document.getElementById(prefix + 'WindowSize');
@@ -76,7 +76,7 @@ function updateWindowSizeVisibility() {
   });
 }
 
-/** Attach all window-size related events. */
+/** Attach all windowSize related events. */
 function setupWindowSizeListeners() {
   WS_PREFIXES.forEach(function (prefix) {
     var panel  = document.getElementById(prefix + 'WindowSize');

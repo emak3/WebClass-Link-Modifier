@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WebClass Link Modifier — 設定</title>
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/options-layout.css">
-  <link rel="stylesheet" href="css/options-components.css">
-  <link rel="stylesheet" href="css/options-window.css">
-  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/footer.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/window.css">
 </head>
 
 <body>
@@ -610,7 +610,7 @@
         </div>
       </div>
 
-    </section><!-- /opts-section links -->
+    </section>
 
     <!-- ─────────────────── DOMAIN SECTION ─── -->
     <section class="opts-section" aria-labelledby="sec-domains-title">
@@ -642,7 +642,7 @@
       </div>
     </section>
 
-  </main><!-- /.opts-main -->
+  </main>
 
   <!-- ═══════════════════════════════ SAVE + STATUS ═ -->
   <div class="opts-bottom">
@@ -664,16 +664,16 @@
     <p>&copy; 2026 WebClass Link Modifier. All rights reserved.</p>
   </footer>
 
-  <!-- JS — load order matters -->
-  <script src="../js/icons.js"></script>
-  <script src="../js/config.js"></script>
-  <script src="../js/options-constants.js"></script>
-  <script src="../js/options-ui.js"></script>
-  <script src="../js/options-domains.js"></script>
-  <script src="../js/options-window-size.js"></script>
-  <script src="../js/options-storage.js"></script>
-  <script src="../js/options-main.js"></script>
-  <script src="../js/accordion.js"></script>
+  <!-- JS — 読み込み順序に注意 -->
+  <script src="../src/shared/icons.js"></script>
+  <script src="../src/shared/config.js"></script>
+  <script src="scripts/constants.js"></script>
+  <script src="scripts/ui.js"></script>
+  <script src="scripts/domains.js"></script>
+  <script src="scripts/windowSize.js"></script>
+  <script src="scripts/storage.js"></script>
+  <script src="scripts/main.js"></script>
+  <script src="../src/shared/accordion.js"></script>
   <!-- Icons from Lucide (https://lucide.dev) — MIT License -->
 </body>
 

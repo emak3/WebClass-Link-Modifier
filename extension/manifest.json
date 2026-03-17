@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "WebClass Link Modifier",
-  "version": "3.4.2",
+  "version": "3.4.3",
   "description": "WebClassサイトのリンクを設定したドメインで管理し、リンクの開き方を個別にカスタマイズできます",
   "permissions": [
     "scripting",
@@ -21,18 +21,18 @@
         "https://lms.salesio-sp.ac.jp/*"
       ],
       "js": [
-        "js/config.js",
-        "js/content.js"
+        "src/shared/config.js",
+        "src/content/content.js"
       ],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
   "background": {
-    "service_worker": "js/background.js"
+    "service_worker": "src/background/background.js"
   },
   "options_ui": {
-    "page": "html/options.html",
+    "page": "options/index.html",
     "open_in_tab": true
   },
   "icons": {

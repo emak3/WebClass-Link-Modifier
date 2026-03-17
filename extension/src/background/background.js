@@ -1,8 +1,8 @@
 /* ================================================================
    background.js — Service worker
-   初期値の編集は js/config.js で行ってください。
+   初期値の編集は src/shared/config.js で行ってください。
    ================================================================ */
-importScripts('config.js');
+importScripts('../shared/config.js');
 
 // ── ドメイン取得 ─────────────────────────────────────────────
 function getDomains(callback) {
@@ -51,7 +51,7 @@ async function registerContentScripts(domains) {
       id: 'webclassModifier',
       matches,
       // config.js を content.js より先にロードする
-      js: ['js/config.js', 'js/content.js'],
+      js: ['src/shared/config.js', 'src/content/content.js'],
       runAt: 'document_start',
       allFrames: true,
     }]);
@@ -109,9 +109,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     sendResponse({ success: true });
   }
 
-  // コンテンツスクリプトからの設定ページ開くリクエスト。
-  // window.open で chrome-extension:// URL を開くと Edge の SmartScreen に
-  // ブロックされるため、バックグラウンドから openOptionsPage() を呼ぶ。
   if (request.action === 'openOptionsPage') {
     chrome.runtime.openOptionsPage();
     sendResponse({ success: true });
@@ -119,7 +116,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 // ── インストール時のデフォルト設定 ────────────────────────────
-// WC_CONFIG.defaults から自動生成するため、追加・変更は config.js のみを編集すれば OK
 chrome.runtime.onInstalled.addListener(function () {
   var allKeys = Object.keys(WC_CONFIG.defaults.behaviors)
     .concat(Object.keys(WC_CONFIG.defaults.windowSizes).map(function (p) { return p + 'WindowSize'; }))
