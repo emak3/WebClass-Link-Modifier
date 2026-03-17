@@ -37,7 +37,8 @@
 
 .opts-brand-webclass-img {
   width: auto;
-  display: block;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .opts-brand-name {
