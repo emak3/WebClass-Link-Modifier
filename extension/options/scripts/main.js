@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function () {
   var brandImg = document.getElementById('opts-brand-img');
   if (brandImg) brandImg.src = _rt.getURL('icons/icon1024.png');
 
+  var webclassImg = document.getElementById('opts-brand-webclass-img');
+  if (webclassImg) webclassImg.src = _rt.getURL('icons/webclass.png');
+
   loadDomains();
   loadLinkBehavior();
   setupWindowSizeListeners();

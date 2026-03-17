@@ -35,11 +35,19 @@
   flex-shrink: 0;
 }
 
+.opts-brand-webclass-img {
+  width: auto;
+  display: block;
+}
+
 .opts-brand-name {
   font-family: var(--font-heading);
-  font-size: var( --text-xl);
+  font-size: var(--text-2xl);
   color: var(--label-1);
   letter-spacing: -0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .opts-brand-version {
@@ -68,7 +76,11 @@
   margin-bottom: 32px;
 }
 
-.opts-info-icon { flex-shrink: 0; color: var(--label-3); margin-top: 1px; }
+.opts-info-icon {
+  flex-shrink: 0;
+  color: var(--label-3);
+  margin-top: 1px;
+}
 
 .opts-info-title {
   font-size: var(--text-sm);
@@ -90,6 +102,7 @@
 .opts-info-steps li {
   counter-increment: step;
 }
+
 .opts-info-steps li::before {
   content: counter(step) ". ";
   color: var(--label-3);
@@ -97,7 +110,9 @@
 }
 
 /* ── Section wrapper ── */
-.opts-section { margin-bottom: 40px; }
+.opts-section {
+  margin-bottom: 40px;
+}
 
 .opts-section-head {
   display: flex;
@@ -106,7 +121,9 @@
   margin-bottom: 12px;
 }
 
-.opts-section-icon { color: var(--label-3); }
+.opts-section-icon {
+  color: var(--label-3);
+}
 
 .opts-section-title {
   font-family: var(--font-sans);
@@ -143,14 +160,41 @@
   align-items: center;
   justify-content: center;
 }
-.opts-status.show    { visibility: visible; opacity: 1; }
-.opts-status.success { color: var(--green); background: var(--green-muted); border-color: rgba(48,209,88,0.25); }
-.opts-status.error   { color: var(--red);   background: var(--red-muted);   border-color: rgba(255,69,58,0.25); }
-.opts-status.info    { color: var(--label-2); background: var(--bg-2); border-color: var(--sep); }
+
+.opts-status.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.opts-status.success {
+  color: var(--green);
+  background: var(--green-muted);
+  border-color: rgba(48, 209, 88, 0.25);
+}
+
+.opts-status.error {
+  color: var(--red);
+  background: var(--red-muted);
+  border-color: rgba(255, 69, 58, 0.25);
+}
+
+.opts-status.info {
+  color: var(--label-2);
+  background: var(--bg-2);
+  border-color: var(--sep);
+}
 
 /* ── Responsive ── */
 @media (max-width: 580px) {
-  .opts-brand-version { display: none; }
-  .opts-main   { padding: 24px 14px 16px; }
-  .opts-bottom { padding: 0 14px 20px; }
+  .opts-brand-version {
+    display: none;
+  }
+
+  .opts-main {
+    padding: 24px 14px 16px;
+  }
+
+  .opts-bottom {
+    padding: 0 14px 20px;
+  }
 }
