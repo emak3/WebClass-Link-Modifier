@@ -18,38 +18,7 @@ function injectSettingsButton() {
     if (!document.getElementById('wclm-style')) {
       const style = document.createElement('style');
       style.id = 'wclm-style';
-      style.textContent = `
-        #wclm-settings-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 55px;
-          height: 48px;
-          padding: 0;
-          background: transparent;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
-          opacity: 0.82;
-          transition: opacity 0.15s, background 0.15s;
-        }
-        #wclm-settings-btn:hover {
-          opacity: 1;
-          background: rgba(255, 255, 255, 0.15);
-        }
-        #wclm-settings-btn:active { transform: scale(0.93); }
-        #wclm-settings-btn img {
-          width: 28px;
-          height: 28px;
-          display: block;
-        }
-        /* Keep the wrapper <li> aligned to navbar row height */
-        #wclm-settings-li {
-          display: flex;
-          align-items: center;
-          padding: 0 4px;
-        }
-      `;
+      style.textContent = WC_SETTINGS_BUTTON_CSS;
       document.head.appendChild(style);
     }
 

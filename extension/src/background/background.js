@@ -52,7 +52,7 @@ async function registerContentScripts(domains) {
       id: 'webclassModifier',
       matches,
       // config.js / api.js を content.js より先にロードする
-      js: ['src/shared/config.js', 'src/shared/api.js', 'src/content/settingsButton.js', 'src/content/content.js'],
+      js: ['src/shared/config.js', 'src/shared/api.js', 'src/content/settingsButtonStyles.js', 'src/content/settingsButton.js', 'src/content/content.js'],
       runAt: 'document_start',
       allFrames: true,
     }]);

@@ -23,6 +23,7 @@
       "js": [
         "src/shared/config.js",
         "src/shared/api.js",
+        "src/content/settingsButtonStyles.js",
         "src/content/settingsButton.js",
         "src/content/content.js"
       ],
