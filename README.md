@@ -18,7 +18,7 @@ WebClassサイトのリンクの開き方を、用途に合わせてカスタマ
 
 ## 対応ブラウザ
 - Google Chrome（推奨）
-- Microsoft Edge（Chromium）
+- Microsoft Edge（対応）
 
 ---
 
