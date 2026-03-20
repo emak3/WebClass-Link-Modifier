@@ -4,23 +4,29 @@
 /* depends on: options-constants.js, options-ui.js, options-domains.js,
                options-windowSize.js */
 
+/** Apply WC_CONFIG.restrictions to behavior settings. */
+function applyBehaviorRestrictions(settings, notifyFn) {
+  Object.keys(WC_CONFIG.restrictions).forEach(function (behaviorKey) {
+    var r = WC_CONFIG.restrictions[behaviorKey];
+    if (r.forbidden.indexOf(settings[behaviorKey]) !== -1) {
+      settings[behaviorKey] = r.fallback;
+      if (typeof notifyFn === 'function') notifyFn(behaviorKey);
+    }
+  });
+}
+
 /** Load all behavior settings from storage and apply to the form. */
 function loadLinkBehavior() {
   var allKeys = BEHAVIOR_KEYS.concat(
     WS_PREFIXES.map(function (p) { return WS_KEY_MAP[p]; })
   );
 
-  chrome.storage.sync.get(allKeys, function (result) {
+  WC_API.storage.sync.get(allKeys, function (result) {
     var s = {};
     allKeys.forEach(function (k) { s[k] = result[k] || DEFAULT_SETTINGS[k]; });
 
     /* 制限チェック（WC_CONFIG.restrictions に従って禁止値を差し替える） */
-    Object.keys(WC_CONFIG.restrictions).forEach(function (behaviorKey) {
-      var r = WC_CONFIG.restrictions[behaviorKey];
-      if (r.forbidden.indexOf(s[behaviorKey]) !== -1) {
-        s[behaviorKey] = r.fallback;
-      }
-    });
+    applyBehaviorRestrictions(s);
 
     /* ラジオボタンに反映 */
     BEHAVIOR_KEYS.forEach(function (key) {
@@ -43,7 +49,7 @@ function loadLinkBehavior() {
 async function requestPermissionsForDomains(domains) {
   var origins = domains.map(function (d) { return 'https://' + d + '/*'; });
   try {
-    return await chrome.permissions.request({ origins: origins });
+    return await WC_API.permissions.request({ origins: origins });
   } catch (e) {
     console.error('Permission request error:', e);
     return false;
@@ -74,13 +80,9 @@ async function saveDomains() {
   });
 
   /* 制限チェック（WC_CONFIG.restrictions に従って禁止値を差し替え、ユーザーに通知） */
-  Object.keys(WC_CONFIG.restrictions).forEach(function (behaviorKey) {
-    var r = WC_CONFIG.restrictions[behaviorKey];
-    if (r.forbidden.indexOf(settings[behaviorKey]) !== -1) {
-      settings[behaviorKey] = r.fallback;
-      /* 差し替えが発生したときだけ通知 */
-      showStatus(behaviorKey + ' の設定が利用できないため、自動的に変更されました。', 'info');
-    }
+  applyBehaviorRestrictions(settings, function (behaviorKey) {
+    /* 差し替えが発生したときだけ通知 */
+    showStatus(behaviorKey + ' の設定が利用できないため、自動的に変更されました。', 'info');
   });
 
   /* ウィンドウサイズを収集 */
@@ -94,15 +96,15 @@ async function saveDomains() {
   });
   if (newDomains.length > 0) {
     showStatus('新しいドメインへのアクセス権限を要求しています...', 'info');
-    var granted = await requestPermissionsForDomains(domains);
+    var granted = await requestPermissionsForDomains(newDomains);
     if (!granted) {
       showStatus('権限が拒否されました。拡張機能は設定したドメインで動作しません。', 'error');
       return;
     }
   }
 
-  chrome.storage.sync.set(settings, function () {
+  WC_API.storage.sync.set(settings, function () {
     showStatus('設定を保存しました。対象ページを再読み込みしてください。', 'success');
-    chrome.runtime.sendMessage({ action: 'updatePermissions', domains: domains });
+    WC_API.runtime.sendMessage({ action: 'updatePermissions', domains: domains });
   });
 }

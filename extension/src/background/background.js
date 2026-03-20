@@ -2,11 +2,12 @@
    background.js — Service worker
    初期値の編集は src/shared/config.js で行ってください。
    ================================================================ */
+importScripts('../shared/api.js');
 importScripts('../shared/config.js');
 
 // ── ドメイン取得 ─────────────────────────────────────────────
 function getDomains(callback) {
-  chrome.storage.sync.get(['domains'], function (result) {
+  WC_API.storage.sync.get(['domains'], function (result) {
     callback(result.domains || WC_CONFIG.defaults.domains.slice());
   });
 }
@@ -25,10 +26,10 @@ async function registerContentScripts(domains) {
 
   try {
     try {
-      const scripts = await chrome.scripting.getRegisteredContentScripts();
+      const scripts = await WC_API.scripting.getRegisteredContentScripts();
       const ids = scripts.map(s => s.id);
       if (ids.length > 0) {
-        await chrome.scripting.unregisterContentScripts({ ids });
+        await WC_API.scripting.unregisterContentScripts({ ids });
         console.log('削除されたスクリプト:', ids);
       }
     } catch (e) {
@@ -37,7 +38,7 @@ async function registerContentScripts(domains) {
 
     const allowedDomains = [];
     for (const domain of domains) {
-      const ok = await chrome.permissions.contains({ origins: [`https://${domain}/*`] });
+      const ok = await WC_API.permissions.contains({ origins: [`https://${domain}/*`] });
       if (ok) allowedDomains.push(domain);
     }
 
@@ -47,11 +48,11 @@ async function registerContentScripts(domains) {
     }
 
     const matches = allowedDomains.map(d => `https://${d}/*`);
-    await chrome.scripting.registerContentScripts([{
+    await WC_API.scripting.registerContentScripts([{
       id: 'webclassModifier',
       matches,
-      // config.js を content.js より先にロードする
-      js: ['src/shared/config.js', 'src/content/content.js'],
+      // config.js / api.js を content.js より先にロードする
+      js: ['src/shared/config.js', 'src/shared/api.js', 'src/content/settingsButton.js', 'src/content/content.js'],
       runAt: 'document_start',
       allFrames: true,
     }]);
@@ -82,18 +83,18 @@ function onBeforeNavigateListener(details) {
 }
 
 function setupListeners() {
-  if (chrome.webNavigation.onCompleted.hasListener(onCompletedListener))
-    chrome.webNavigation.onCompleted.removeListener(onCompletedListener);
-  if (chrome.webNavigation.onBeforeNavigate.hasListener(onBeforeNavigateListener))
-    chrome.webNavigation.onBeforeNavigate.removeListener(onBeforeNavigateListener);
+  if (WC_API.webNavigation.onCompleted.hasListener(onCompletedListener))
+    WC_API.webNavigation.onCompleted.removeListener(onCompletedListener);
+  if (WC_API.webNavigation.onBeforeNavigate.hasListener(onBeforeNavigateListener))
+    WC_API.webNavigation.onBeforeNavigate.removeListener(onBeforeNavigateListener);
 
   getDomains(function (domains) {
     try {
-      chrome.webNavigation.onCompleted.addListener(onCompletedListener,
+      WC_API.webNavigation.onCompleted.addListener(onCompletedListener,
         { url: generateUrlFilters(domains) });
     } catch (e) { console.error('onCompleted リスナー設定エラー:', e); }
     try {
-      chrome.webNavigation.onBeforeNavigate.addListener(onBeforeNavigateListener);
+      WC_API.webNavigation.onBeforeNavigate.addListener(onBeforeNavigateListener);
     } catch (e) { console.error('onBeforeNavigate リスナー設定エラー:', e); }
     registerContentScripts(domains);
   });
@@ -103,25 +104,25 @@ function setupListeners() {
 setupListeners();
 
 // ── メッセージ受信 ────────────────────────────────────────────
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+WC_API.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action === 'updatePermissions') {
     setupListeners();
     sendResponse({ success: true });
   }
 
   if (request.action === 'openOptionsPage') {
-    chrome.runtime.openOptionsPage();
+    WC_API.runtime.openOptionsPage();
     sendResponse({ success: true });
   }
 });
 
 // ── インストール時のデフォルト設定 ────────────────────────────
-chrome.runtime.onInstalled.addListener(function () {
+WC_API.runtime.onInstalled.addListener(function () {
   var allKeys = Object.keys(WC_CONFIG.defaults.behaviors)
     .concat(Object.keys(WC_CONFIG.defaults.windowSizes).map(function (p) { return p + 'WindowSize'; }))
     .concat(['domains']);
 
-  chrome.storage.sync.get(allKeys, function (result) {
+  WC_API.storage.sync.get(allKeys, function (result) {
     var updates = {};
 
     if (!result.domains) {
@@ -135,18 +136,18 @@ chrome.runtime.onInstalled.addListener(function () {
       if (!result[key]) updates[key] = WC_CONFIG.defaults.windowSizes[prefix];
     });
 
-    if (Object.keys(updates).length > 0) chrome.storage.sync.set(updates);
+    if (Object.keys(updates).length > 0) WC_API.storage.sync.set(updates);
   });
 
   setupListeners();
 });
 
 // ── 権限変更の監視 ────────────────────────────────────────────
-chrome.permissions.onAdded.addListener(function (p) {
+WC_API.permissions.onAdded.addListener(function (p) {
   console.log('権限追加:', p);
   setupListeners();
 });
-chrome.permissions.onRemoved.addListener(function (p) {
+WC_API.permissions.onRemoved.addListener(function (p) {
   console.log('権限削除:', p);
   setupListeners();
 });

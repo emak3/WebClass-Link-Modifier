@@ -5,8 +5,7 @@
 
 document.addEventListener('DOMContentLoaded', function () {
   // content.js の設定ボタン注入と同じ方法でアイコンを解決
-  var _rt = (typeof browser !== 'undefined' && browser && browser.runtime)
-    ? browser.runtime : chrome.runtime;
+  var _rt = WC_API.runtime;
   var brandImg = document.getElementById('opts-brand-img');
   if (brandImg) brandImg.src = _rt.getURL('icons/icon1024.png');
 

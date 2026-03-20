@@ -69,7 +69,7 @@ function addDomain() {
 
 /** ストレージから読み込んで描画（初回のみ） */
 function loadDomains() {
-  chrome.storage.sync.get(['domains'], function (result) {
+  WC_API.storage.sync.get(['domains'], function (result) {
     displayDomains(result.domains || DEFAULT_DOMAINS.slice());
   });
 }

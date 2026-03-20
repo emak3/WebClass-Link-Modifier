@@ -22,6 +22,8 @@
       ],
       "js": [
         "src/shared/config.js",
+        "src/shared/api.js",
+        "src/content/settingsButton.js",
         "src/content/content.js"
       ],
       "run_at": "document_start",

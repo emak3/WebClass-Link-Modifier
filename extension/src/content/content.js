@@ -15,7 +15,7 @@ const storageKeys = Object.keys(WC_CONFIG.defaults.behaviors)
   .concat(Object.keys(WC_CONFIG.defaults.windowSizes).map(p => p + 'WindowSize'))
   .concat(['domains']);
 
-chrome.storage.sync.get(storageKeys, function (result) {
+WC_API.storage.sync.get(storageKeys, function (result) {
   targetDomains = result.domains || WC_CONFIG.defaults.domains.slice();
 
   Object.keys(WC_CONFIG.defaults.behaviors).forEach(function (k) {
@@ -308,109 +308,40 @@ function initExtension() {
     } catch (e) { console.error('関数上書きエラー:', e); }
   }
 
-  // ── 設定ボタン注入 ────────────────────────────────────────
-  // #menu .navbar-right のログアウト <li> の直前に設定ボタン <li> を挿入する。
-  // 一度だけ実行し、2回目以降は何もしない（id ガード）。
-  function injectSettingsButton() {
-    try {
-      if (document.getElementById('wclm-settings-btn')) return;
-
-      // ログアウトリンクを含む <li> を探す
-      const logoutLink = document.querySelector('#menu .navbar-nav.navbar-right li a[href*="logout.php"]');
-      if (!logoutLink) return;
-      const logoutLi = logoutLink.closest('li');
-      if (!logoutLi) return;
-
-      // ── スタイル注入（一度だけ）──
-      if (!document.getElementById('wclm-style')) {
-        const style = document.createElement('style');
-        style.id = 'wclm-style';
-        style.textContent = `
-          #wclm-settings-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 55px;
-            height: 48px;
-            padding: 0;
-            background: transparent;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            opacity: 0.82;
-            transition: opacity 0.15s, background 0.15s;
-          }
-          #wclm-settings-btn:hover {
-            opacity: 1;
-            background: rgba(255, 255, 255, 0.15);
-          }
-          #wclm-settings-btn:active { transform: scale(0.93); }
-          #wclm-settings-btn img {
-            width: 28px;
-            height: 28px;
-            display: block;
-          }
-          /* ボタンを包む <li> を navbar の行高に合わせる */
-          #wclm-settings-li {
-            display: flex;
-            align-items: center;
-            padding: 0 4px;
-          }
-        `;
-        document.head.appendChild(style);
-      }
-
-      // ── <li> + <button> を生成 ──
-      const li = document.createElement('li');
-      li.id = 'wclm-settings-li';
-
-      const btn = document.createElement('button');
-      btn.id = 'wclm-settings-btn';
-      btn.type = 'button';
-      btn.title = 'WebClass Link Modifier — 設定';
-      btn.setAttribute('aria-label', 'WebClass Link Modifier の設定を開く');
-
-      const img = document.createElement('img');
-      // chrome.runtime.getURL は Chrome / Edge(Chromium) どちらでも動作する。
-      // Firefox のみ browser.runtime が必要なためフォールバックを用意する。
-      const _rt = (typeof browser !== 'undefined' && browser && browser.runtime)
-        ? browser.runtime : chrome.runtime;
-      img.src = _rt.getURL('icons/icon1024.png');
-      img.alt = 'WebClass Link Modifier';
-      btn.appendChild(img);
-
-      // ── クリックでバックグラウンド経由で設定ページを開く ──
-      // window.open で extension:// URL を開くと Edge の SmartScreen に
-      // ブロックされるため、background.js の openOptionsPage に委ねる。
-      btn.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        _rt.sendMessage({ action: 'openOptionsPage' }, function () {
-          void chrome.runtime.lastError; // 未参照警告を抑制
-        });
-      });
-
-      li.appendChild(btn);
-
-      // ログアウト <li> の直前（= 左側）に挿入
-      logoutLi.parentNode.insertBefore(li, logoutLi);
-    } catch (e) {
-      console.error('設定ボタン注入エラー:', e);
-    }
-  }
+  // 設定ボタン注入は settingsButton.js に移動しました
 
   // ── 初期化 ────────────────────────────────────────────────
-  function init() {
+  var globalOverrideDone = false;
+  var initialDomProcessed = false;
+  var observerStarted = false;
+
+  function ensureInitialized() {
     try {
-      overrideGlobalFunctions();
-      if (document.body) {
+      if (!globalOverrideDone) {
+        overrideGlobalFunctions();
+        globalOverrideDone = true;
+      }
+
+      if (!document.body) {
+        setTimeout(ensureInitialized, 10);
+        return;
+      }
+
+      // 最初の DOM 処理は一度だけ行う（以降は MutationObserver が差分対応）
+      if (!initialDomProcessed) {
         modifyLinks(); modifyForms(); modifyLoginButtons();
         injectSettingsButton();
-        setupObserver();
-      } else {
-        setTimeout(init, 10);
+        initialDomProcessed = true;
       }
-    } catch (e) { console.error('初期化エラー:', e); setTimeout(init, 100); }
+
+      if (!observerStarted) {
+        setupObserver();
+        observerStarted = true;
+      }
+    } catch (e) {
+      console.error('初期化エラー:', e);
+      setTimeout(ensureInitialized, 100);
+    }
   }
 
   function setupObserver() {
@@ -427,26 +358,21 @@ function initExtension() {
     } catch (e) { console.error('監視設定エラー:', e); }
   }
 
-  init();
+  ensureInitialized();
 
   document.onreadystatechange = function () {
     if (document.readyState === 'interactive' || document.readyState === 'complete') {
-      modifyLinks(); modifyForms(); modifyLoginButtons();
-      injectSettingsButton();
-      setupObserver();
+      ensureInitialized();
     }
   };
   document.addEventListener('DOMContentLoaded', function () {
     try {
-      modifyLinks(); modifyForms(); modifyLoginButtons();
-      injectSettingsButton();
-      setupObserver();
+      ensureInitialized();
     } catch (e) { console.error('DOMContentLoaded エラー:', e); }
   });
   window.addEventListener('load', function () {
     try {
-      modifyLinks(); modifyForms(); modifyLoginButtons();
-      injectSettingsButton();
+      ensureInitialized();
     } catch (e) { console.error('window.load エラー:', e); }
   });
 }
