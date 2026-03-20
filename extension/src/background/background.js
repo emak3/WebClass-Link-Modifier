@@ -117,7 +117,9 @@ WC_API.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 // ── インストール時のデフォルト設定 ────────────────────────────
-WC_API.runtime.onInstalled.addListener(function () {
+WC_API.runtime.onInstalled.addListener(function (details) {
+  var shouldOpenOptions = details && details.reason === 'install';
+
   var allKeys = Object.keys(WC_CONFIG.defaults.behaviors)
     .concat(Object.keys(WC_CONFIG.defaults.windowSizes).map(function (p) { return p + 'WindowSize'; }))
     .concat(['domains']);
@@ -137,9 +139,16 @@ WC_API.runtime.onInstalled.addListener(function () {
     });
 
     if (Object.keys(updates).length > 0) WC_API.storage.sync.set(updates);
-  });
+    setupListeners();
 
-  setupListeners();
+    // 初回インストール時だけオプション画面を案内する。
+    // update 時まで開かないようにして、ユーザー体験を邪魔しないようにする。
+    if (shouldOpenOptions) {
+      setTimeout(function () {
+        try { WC_API.runtime.openOptionsPage(); } catch (e) { /* noop */ }
+      }, 300);
+    }
+  });
 });
 
 // ── 権限変更の監視 ────────────────────────────────────────────
