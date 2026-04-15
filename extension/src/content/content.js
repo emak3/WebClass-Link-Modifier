@@ -16,7 +16,8 @@ const storageKeys = Object.keys(WC_CONFIG.defaults.behaviors)
   .concat(['domains']);
 
 WC_API.storage.sync.get(storageKeys, function (result) {
-  targetDomains = result.domains || WC_CONFIG.defaults.domains.slice();
+  var stored = result.domains;
+  targetDomains = Array.isArray(stored) ? stored : WC_CONFIG.defaults.domains.slice();
 
   Object.keys(WC_CONFIG.defaults.behaviors).forEach(function (k) {
     behaviors[k] = result[k] || WC_CONFIG.defaults.behaviors[k];

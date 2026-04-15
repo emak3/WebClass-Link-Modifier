@@ -47,7 +47,11 @@ function loadLinkBehavior() {
 
 /** Request host permissions for the given domains. */
 async function requestPermissionsForDomains(domains) {
-  var origins = domains.map(function (d) { return 'https://' + d + '/*'; });
+  var origins = [];
+  domains.forEach(function (d) {
+    origins.push('https://' + d + '/*');
+    origins.push('http://' + d + '/*');
+  });
   try {
     return await WC_API.permissions.request({ origins: origins });
   } catch (e) {
@@ -58,6 +62,10 @@ async function requestPermissionsForDomains(domains) {
 
 /** Collect form values and write to storage. */
 async function saveDomains() {
+  document.querySelectorAll('.domain-item .domain-input').forEach(function (inp) {
+    var n = normalizeDomainHost(inp.value);
+    if (n && inp.value.trim() !== n) inp.value = n;
+  });
   var domains = getDomainsFromDOM();
 
   if (domains.length === 0) {
@@ -90,12 +98,12 @@ async function saveDomains() {
     settings[WS_KEY_MAP[prefix]] = getWindowSizeData(prefix);
   });
 
-  /* 新規ドメインの権限リクエスト */
+  /* パッケージ既定以外のドメイン、または既定が空のときは入力ドメインすべてに対し権限を確認 */
   var newDomains = domains.filter(function (d) {
     return DEFAULT_DOMAINS.indexOf(d) === -1;
   });
   if (newDomains.length > 0) {
-    showStatus('新しいドメインへのアクセス権限を要求しています...', 'info');
+    showStatus('サイトへのアクセス権限を要求しています...', 'info');
     var granted = await requestPermissionsForDomains(newDomains);
     if (!granted) {
       showStatus('権限が拒否されました。拡張機能は設定したドメインで動作しません。', 'error');

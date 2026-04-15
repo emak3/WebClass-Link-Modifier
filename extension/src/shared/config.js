@@ -25,7 +25,8 @@ var WC_CONFIG = {
 
   /* ── デフォルト値 ───────────────────────────────────────── */
   defaults: {
-    domains: ['lms.salesio-sp.ac.jp'],
+    /* インストール直後は空。設定画面で大学の WebClass ホスト名を登録する。 */
+    domains: [],
 
     behaviors: {
       linkBehavior: 'sameTab',

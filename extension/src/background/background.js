@@ -8,7 +8,8 @@ importScripts('../shared/config.js');
 // ── ドメイン取得 ─────────────────────────────────────────────
 function getDomains(callback) {
   WC_API.storage.sync.get(['domains'], function (result) {
-    callback(result.domains || WC_CONFIG.defaults.domains.slice());
+    var d = result.domains;
+    callback(Array.isArray(d) ? d : WC_CONFIG.defaults.domains.slice());
   });
 }
 
@@ -38,8 +39,9 @@ async function registerContentScripts(domains) {
 
     const allowedDomains = [];
     for (const domain of domains) {
-      const ok = await WC_API.permissions.contains({ origins: [`https://${domain}/*`] });
-      if (ok) allowedDomains.push(domain);
+      const okHttps = await WC_API.permissions.contains({ origins: [`https://${domain}/*`] });
+      const okHttp = await WC_API.permissions.contains({ origins: [`http://${domain}/*`] });
+      if (okHttps || okHttp) allowedDomains.push(domain);
     }
 
     if (allowedDomains.length === 0) {
@@ -47,7 +49,16 @@ async function registerContentScripts(domains) {
       return;
     }
 
-    const matches = allowedDomains.map(d => `https://${d}/*`);
+    const matches = [];
+    for (const d of allowedDomains) {
+      if (await WC_API.permissions.contains({ origins: [`https://${d}/*`] })) {
+        matches.push(`https://${d}/*`);
+      }
+      if (await WC_API.permissions.contains({ origins: [`http://${d}/*`] })) {
+        matches.push(`http://${d}/*`);
+      }
+    }
+    if (matches.length === 0) return;
     await WC_API.scripting.registerContentScripts([{
       id: 'webclassModifier',
       matches,
@@ -90,8 +101,10 @@ function setupListeners() {
 
   getDomains(function (domains) {
     try {
-      WC_API.webNavigation.onCompleted.addListener(onCompletedListener,
-        { url: generateUrlFilters(domains) });
+      if (domains.length > 0) {
+        WC_API.webNavigation.onCompleted.addListener(onCompletedListener,
+          { url: generateUrlFilters(domains) });
+      }
     } catch (e) { console.error('onCompleted リスナー設定エラー:', e); }
     try {
       WC_API.webNavigation.onBeforeNavigate.addListener(onBeforeNavigateListener);
@@ -127,7 +140,7 @@ WC_API.runtime.onInstalled.addListener(function (details) {
   WC_API.storage.sync.get(allKeys, function (result) {
     var updates = {};
 
-    if (!result.domains) {
+    if (!Array.isArray(result.domains)) {
       updates.domains = WC_CONFIG.defaults.domains.slice();
     }
     Object.keys(WC_CONFIG.defaults.behaviors).forEach(function (key) {
@@ -138,18 +151,25 @@ WC_API.runtime.onInstalled.addListener(function (details) {
       if (!result[key]) updates[key] = WC_CONFIG.defaults.windowSizes[prefix];
     });
 
-    if (Object.keys(updates).length > 0) WC_API.storage.sync.set(updates);
-    setupListeners();
-
-    // 初回インストール時だけオプション画面を案内する。
-    // update 時まで開かないようにして、ユーザー体験を邪魔しないようにする。
-    if (shouldOpenOptions) {
-      setTimeout(function () {
+    function afterPersist() {
+      setupListeners();
+      if (shouldOpenOptions) {
         try { WC_API.runtime.openOptionsPage(); } catch (e) { /* noop */ }
-      }, 300);
+      }
+    }
+    if (Object.keys(updates).length > 0) {
+      WC_API.storage.sync.set(updates, afterPersist);
+    } else {
+      afterPersist();
     }
   });
 });
+
+if (WC_API.action && WC_API.action.onClicked) {
+  WC_API.action.onClicked.addListener(function () {
+    try { WC_API.runtime.openOptionsPage(); } catch (e) { /* noop */ }
+  });
+}
 
 // ── 権限変更の監視 ────────────────────────────────────────────
 WC_API.permissions.onAdded.addListener(function (p) {

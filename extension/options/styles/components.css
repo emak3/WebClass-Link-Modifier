@@ -167,6 +167,8 @@
   font-size: var(--text-sm);
   color: var(--label-1);
   transition: border-color var(--t-fast), background var(--t-fast);
+  /* フォーカス時の自動スクロールで下に保存欄が隠れないよう余白を確保 */
+  scroll-margin-bottom: max(220px, 36vh);
 }
 .domain-input:focus {
   outline: none;
