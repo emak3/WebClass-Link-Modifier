@@ -9,28 +9,17 @@
     "storage"
   ],
   "optional_permissions": [],
-  "host_permissions": [
-    "https://lms.salesio-sp.ac.jp/*"
-  ],
   "optional_host_permissions": [
+    "http://*/*",
     "https://*/*"
   ],
-  "content_scripts": [
-    {
-      "matches": [
-        "https://lms.salesio-sp.ac.jp/*"
-      ],
-      "js": [
-        "src/shared/config.js",
-        "src/shared/api.js",
-        "src/content/settingsButtonStyles.js",
-        "src/content/settingsButton.js",
-        "src/content/content.js"
-      ],
-      "run_at": "document_start",
-      "all_frames": true
+  "action": {
+    "default_title": "WebClass Link Modifier — クリックで設定",
+    "default_icon": {
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
     }
-  ],
+  },
   "background": {
     "service_worker": "src/background/background.js"
   },

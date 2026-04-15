@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var webclassImg = document.getElementById('opts-brand-webclass-img');
   if (webclassImg) webclassImg.src = _rt.getURL('icons/webclass.png');
 
+  initDomainFieldBehavior();
   loadDomains();
   loadLinkBehavior();
   setupWindowSizeListeners();
